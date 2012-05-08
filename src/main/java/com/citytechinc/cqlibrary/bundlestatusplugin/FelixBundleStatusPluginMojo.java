@@ -9,13 +9,6 @@ import org.apache.maven.plugin.MojoExecutionException;
 public final class FelixBundleStatusPluginMojo extends AbstractMojo {
 
     /**
-     * The hello message to display.
-     *
-     * @parameter expression="${message}" default-value="Hello World!"
-     */
-    private String message;
-
-    /**
      * Felix container host name.
      *
      * @parameter default-value="localhost"
@@ -43,8 +36,21 @@ public final class FelixBundleStatusPluginMojo extends AbstractMojo {
      */
     private String password;
 
+    /**
+     * Symbolic name of OSGi bundle.
+     *
+     * @parameter
+     */
+    private String bundleSymbolicName;
+
     @Override
     public void execute() throws MojoExecutionException {
-        getLog().info("message = " + message);
+        if (bundleSymbolicName == null) {
+
+        } else {
+            final String status = new FelixBundleStatusChecker(this).getStatus(host, port, user, password,
+                "com.sigmaaldrich.sigma-aldrich-core");
+
+        }
     }
 }
