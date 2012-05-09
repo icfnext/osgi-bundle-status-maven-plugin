@@ -2,6 +2,7 @@ package com.citytechinc.cqlibrary.bundlestatusplugin;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
 
 /**
  * @goal status
@@ -40,17 +41,14 @@ public final class FelixBundleStatusPluginMojo extends AbstractMojo {
      * Symbolic name of OSGi bundle.
      *
      * @parameter
+     * @required
      */
     private String bundleSymbolicName;
 
     @Override
-    public void execute() throws MojoExecutionException {
-        if (bundleSymbolicName == null) {
+    public void execute() throws MojoExecutionException, MojoFailureException {
+        final FelixBundleStatusChecker checker = new FelixBundleStatusChecker(this, host, port, user, password);
 
-        } else {
-            final String status = new FelixBundleStatusChecker(this).getStatus(host, port, user, password,
-                "com.sigmaaldrich.sigma-aldrich-core");
-
-        }
+        checker.checkStatus(bundleSymbolicName);
     }
 }
