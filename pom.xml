@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.citytechinc.cqlibrary</groupId>
+    <artifactId>maven-osgi-bundle-status-plugin</artifactId>
+    <name>CITYTECH, Inc. CQ5 Library - Maven OSGi Bundle Status Plugin</name>
+    <description>Remote bundle status checker for OSGi containers.</description>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>maven-plugin</packaging>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- dependency versions -->
+        <gmaven.version>1.4</gmaven.version>
+        <gmaven.provider.version>1.8</gmaven.provider.version>
+        <groovy.version>1.8.6</groovy.version>
+        <groovy.http-builder.version>0.5.2</groovy.http-builder.version>
+        <maven.plugin.api.version>3.0.4</maven.plugin.api.version>
+        <httpcore.version>4.0.1</httpcore.version>
+        <junit.version>4.10</junit.version>
+
+        <!-- plugin dependency versions -->
+        <compiler.plugin.version>2.3.2</compiler.plugin.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-plugin-api</artifactId>
+            <version>${maven.plugin.api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <version>${httpcore.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
+            <version>${groovy.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.groovy.modules.http-builder</groupId>
+            <artifactId>http-builder</artifactId>
+            <version>${groovy.http-builder.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${compiler.plugin.version}</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                    <encoding>utf-8</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.gmaven</groupId>
+                <artifactId>gmaven-plugin</artifactId>
+                <version>${gmaven.version}</version>
+                <executions>
+                    <execution>
+                        <configuration>
+                            <providerSelection>${gmaven.provider.version}</providerSelection>
+                        </configuration>
+                        <goals>
+                            <goal>generateStubs</goal>
+                            <goal>compile</goal>
+                            <goal>generateTestStubs</goal>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.codehaus.gmaven.runtime</groupId>
+                        <artifactId>gmaven-runtime-${gmaven.provider.version}</artifactId>
+                        <version>${gmaven.version}</version>
+                        <exclusions>
+                            <exclusion>
+                                <groupId>org.codehaus.groovy</groupId>
+                                <artifactId>groovy-all</artifactId>
+                            </exclusion>
+                        </exclusions>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy-all</artifactId>
+                        <version>${groovy.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
+</project>
