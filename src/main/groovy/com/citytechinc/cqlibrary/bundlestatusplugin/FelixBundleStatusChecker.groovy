@@ -11,7 +11,7 @@ import org.apache.maven.plugin.Mojo
 import org.apache.maven.plugin.MojoExecutionException
 import org.apache.maven.plugin.MojoFailureException
 
-final class FelixBundleStatusChecker {
+final class FelixBundleStatusChecker implements BundleStatusChecker {
 
     static final String STATUS_ACTIVE = "Active"
 
@@ -33,6 +33,7 @@ final class FelixBundleStatusChecker {
         })
     }
 
+    @Override
     void checkStatus(bundleSymbolicName) throws MojoExecutionException, MojoFailureException {
         try {
             def status = getStatus(bundleSymbolicName)

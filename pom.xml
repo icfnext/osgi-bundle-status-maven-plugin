@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.citytechinc.cqlibrary</groupId>
-    <artifactId>maven-felix-bundle-status-plugin</artifactId>
-    <name>CITYTECH, Inc. CQ5 Library - Maven Felix Bundle Status Plugin</name>
-    <description>Remote bundle status checker for the Apache Felix OSGi container.</description>
+    <artifactId>maven-osgi-bundle-status-plugin</artifactId>
+    <name>CITYTECH, Inc. CQ5 Library - Maven OSGi Bundle Status Plugin</name>
+    <description>Remote bundle status checker for OSGi containers.</description>
     <version>1.0-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 

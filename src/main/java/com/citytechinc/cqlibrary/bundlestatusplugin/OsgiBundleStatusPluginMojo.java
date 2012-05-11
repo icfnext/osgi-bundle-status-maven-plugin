@@ -6,8 +6,9 @@ import org.apache.maven.plugin.MojoFailureException;
 
 /**
  * @goal status
+ * @phase verify
  */
-public final class FelixBundleStatusPluginMojo extends AbstractMojo {
+public final class OsgiBundleStatusPluginMojo extends AbstractMojo {
 
     /**
      * Felix container host name.
@@ -47,7 +48,7 @@ public final class FelixBundleStatusPluginMojo extends AbstractMojo {
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
-        final FelixBundleStatusChecker checker = new FelixBundleStatusChecker(this, host, port, user, password);
+        final BundleStatusChecker checker = new FelixBundleStatusChecker(this, host, port, user, password);
 
         checker.checkStatus(bundleSymbolicName);
     }
