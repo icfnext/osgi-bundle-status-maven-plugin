@@ -15,12 +15,19 @@ final class FelixBundleStatusChecker implements BundleStatusChecker {
 
     static final String STATUS_ACTIVE = "Active"
 
+    private final def mojo
+
     private final def log
 
     private final def http
 
-    FelixBundleStatusChecker(Mojo mojo, host, port, user, password) {
+    FelixBundleStatusChecker(OsgiBundleStatusPluginMojo mojo) {
+        this.mojo = mojo
+
         log = mojo.log
+
+        def host = mojo.host
+        def port = mojo.port
 
         log.info "Connecting to Felix Console : $host:$port"
 
@@ -28,20 +35,39 @@ final class FelixBundleStatusChecker implements BundleStatusChecker {
 
         http.client.addRequestInterceptor(new HttpRequestInterceptor() {
             void process(HttpRequest httpRequest, HttpContext httpContext) {
-                httpRequest.addHeader("Authorization", "Basic " + "${user}:${password}".toString().bytes.encodeBase64().toString())
+                httpRequest.addHeader("Authorization", "Basic " + "${mojo.user}:${mojo.password}".toString().bytes.encodeBase64().toString())
             }
         })
     }
 
     @Override
     void checkStatus(bundleSymbolicName) throws MojoExecutionException, MojoFailureException {
+        log.info "Checking OSGi bundle status : $bundleSymbolicName"
+
+        def delay = mojo.retryDelay
+        def limit = mojo.retryLimit
+
         try {
-            def status = getStatus(bundleSymbolicName)
+            def status = ''
 
-            if (STATUS_ACTIVE.equals(status)) {
+            def retryCount = 0
 
+            while (STATUS_ACTIVE != status && retryCount <= limit) {
+                if (retryCount > 0) {
+                    log.info "Bundle is $status, retrying..."
+                }
+
+                status = getStatus(bundleSymbolicName)
+
+                Thread.sleep(delay)
+
+                retryCount++
+            }
+
+            if (STATUS_ACTIVE == status) {
+                log.info "$bundleSymbolicName is $STATUS_ACTIVE"
             } else {
-                throw new MojoFailureException("Bundle " + bundleSymbolicName + " is not active")
+                throw new MojoFailureException("Bundle $bundleSymbolicName must be $STATUS_ACTIVE but is $status")
             }
         } catch (IOException ioe) {
             throw new MojoExecutionException("Error getting bundle status from Felix Console", ioe)
@@ -49,9 +75,7 @@ final class FelixBundleStatusChecker implements BundleStatusChecker {
     }
 
     private String getStatus(bundleSymbolicName) throws MojoExecutionException, MojoFailureException, IOException {
-        def status = ''
-
-        log.info "Checking OSGi bundle status : $bundleSymbolicName"
+        def status = ""
 
         http.get(path: "/system/console/bundles/.json") { response, json ->
             if (json) {
@@ -61,13 +85,11 @@ final class FelixBundleStatusChecker implements BundleStatusChecker {
 
                 if (bundle) {
                     status = bundle.state
-
-                    log.info "$bundleSymbolicName is $status"
                 } else {
                     throw new MojoFailureException("Bundle not found : $bundleSymbolicName")
                 }
             } else {
-                throw new MojoExecutionException('Error getting JSON response from Felix Console')
+                throw new MojoExecutionException("Error getting JSON response from Felix Console")
             }
         }
 
