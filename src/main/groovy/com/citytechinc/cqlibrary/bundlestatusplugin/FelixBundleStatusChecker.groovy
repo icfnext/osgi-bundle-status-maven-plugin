@@ -13,8 +13,6 @@ import org.apache.maven.plugin.MojoFailureException
 
 final class FelixBundleStatusChecker implements BundleStatusChecker {
 
-    static final String STATUS_ACTIVE = "Active"
-
     private final def mojo
 
     private final def restClient
@@ -49,6 +47,7 @@ final class FelixBundleStatusChecker implements BundleStatusChecker {
     void checkStatus(bundleSymbolicName) throws MojoExecutionException, MojoFailureException {
         log.info "Checking OSGi bundle status: $bundleSymbolicName"
 
+        def requiredStatus = mojo.requiredStatus
         def delay = mojo.retryDelay
         def limit = mojo.retryLimit
 
@@ -57,7 +56,7 @@ final class FelixBundleStatusChecker implements BundleStatusChecker {
 
             def retryCount = 0
 
-            while (STATUS_ACTIVE != status && retryCount <= limit) {
+            while (requiredStatus != status && retryCount <= limit) {
                 if (retryCount > 0) {
                     log.info "Bundle is $status, retrying..."
                 }
@@ -69,10 +68,10 @@ final class FelixBundleStatusChecker implements BundleStatusChecker {
                 retryCount++
             }
 
-            if (STATUS_ACTIVE == status) {
-                log.info "$bundleSymbolicName is $STATUS_ACTIVE"
+            if (requiredStatus == status) {
+                log.info "$bundleSymbolicName is $status"
             } else {
-                throw new MojoFailureException("Bundle $bundleSymbolicName must be $STATUS_ACTIVE but is $status")
+                throw new MojoFailureException("$bundleSymbolicName bundle status required to be $requiredStatus but is $status")
             }
         } catch (IOException ioe) {
             throw new MojoExecutionException("Error getting bundle status from Felix Console", ioe)

@@ -11,12 +11,12 @@ import org.apache.maven.plugin.MojoFailureException;
 public class OsgiBundleStatusPluginMojo extends AbstractMojo {
 
     /**
-     * Symbolic name of OSGi bundle.
+     * Symbolic names of OSGi bundles to check.
      *
      * @parameter
      * @required
      */
-    private String bundleSymbolicName;
+    private String[] bundleNames;
 
     /**
      * Felix container host name.
@@ -38,6 +38,13 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
      * @parameter default-value="4502"
      */
     private String port;
+
+    /**
+     * Required status for bundle(s) being checked. Defaults to "Active".
+     *
+     * @parameter default-value="Active"
+     */
+    private String requiredStatus;
 
     /**
      * Delay in milliseconds before retrying bundle status check.
@@ -76,12 +83,10 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
             // implementations are added
             final BundleStatusChecker checker = FelixBundleStatusChecker.createFromMojo(this);
 
-            checker.checkStatus(bundleSymbolicName);
+            for (final String bundleName : bundleNames) {
+                checker.checkStatus(bundleName);
+            }
         }
-    }
-
-    public String getBundleSymbolicName() {
-        return bundleSymbolicName;
     }
 
     public String getHost() {
@@ -94,6 +99,10 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
 
     public String getPort() {
         return port;
+    }
+
+    public String getRequiredStatus() {
+        return requiredStatus;
     }
 
     public Integer getRetryDelay() {

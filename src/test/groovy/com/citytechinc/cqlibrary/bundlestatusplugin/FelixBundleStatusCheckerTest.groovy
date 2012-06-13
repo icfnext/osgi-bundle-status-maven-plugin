@@ -21,6 +21,7 @@ class FelixBundleStatusCheckerTest extends Specification {
         mojo.port >> '4502'
         mojo.user >> 'admin'
         mojo.password >> 'admin'
+        mojo.requiredStatus >> 'Active'
         mojo.retryDelay >> 100
         mojo.retryLimit >> 5
         mojo.log >> Mock(Log)
