@@ -25,7 +25,7 @@ final class FelixBundleStatusChecker implements BundleStatusChecker {
         def host = mojo.host
         def port = mojo.port
 
-        mojo.log.info "Connecting to Felix Console : $host:$port"
+        mojo.log.info "Connecting to Felix Console @ $host:$port"
 
         def restClient = new RESTClient("http://$host:$port")
 
@@ -47,7 +47,7 @@ final class FelixBundleStatusChecker implements BundleStatusChecker {
 
     @Override
     void checkStatus(bundleSymbolicName) throws MojoExecutionException, MojoFailureException {
-        log.info "Checking OSGi bundle status : $bundleSymbolicName"
+        log.info "Checking OSGi bundle status: $bundleSymbolicName"
 
         def delay = mojo.retryDelay
         def limit = mojo.retryLimit

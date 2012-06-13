@@ -54,6 +54,13 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
     private Integer retryLimit;
 
     /**
+     * Skip execution of the plugin.
+     *
+     * @parameter expression="${osgi.bundle.status.skip}" default-value="false"
+     */
+    private boolean skip;
+
+    /**
      * Felix container user name.
      *
      * @parameter default-value="admin"
@@ -62,9 +69,13 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
-        final BundleStatusChecker checker = FelixBundleStatusChecker.createFromMojo(this);
+        if (skip) {
+            getLog().info("Skipping execute per configuration");
+        } else {
+            final BundleStatusChecker checker = FelixBundleStatusChecker.createFromMojo(this);
 
-        checker.checkStatus(bundleSymbolicName);
+            checker.checkStatus(bundleSymbolicName);
+        }
     }
 
     public String getBundleSymbolicName() {
