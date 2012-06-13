@@ -8,7 +8,7 @@
     <artifactId>maven-osgi-bundle-status-plugin</artifactId>
     <name>CITYTECH, Inc. CQ5 Library - Maven OSGi Bundle Status Plugin</name>
     <description>Remote bundle status checker for OSGi containers.</description>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.1-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <properties>
@@ -22,9 +22,13 @@
         <maven.plugin.api.version>3.0.4</maven.plugin.api.version>
         <httpcore.version>4.0.1</httpcore.version>
         <junit.version>4.10</junit.version>
+        <spock.version>0.6-groovy-1.8</spock.version>
+        <cglib.version>2.2</cglib.version>
+        <objenesis.version>1.2</objenesis.version>
 
         <!-- plugin dependency versions -->
         <compiler.plugin.version>2.3.2</compiler.plugin.version>
+        <surefire.plugin.version>2.11</surefire.plugin.version>
     </properties>
 
     <dependencies>
@@ -47,11 +51,35 @@
             <groupId>org.codehaus.groovy.modules.http-builder</groupId>
             <artifactId>http-builder</artifactId>
             <version>${groovy.http-builder.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.codehaus.groovy</groupId>
+                    <artifactId>groovy</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.spockframework</groupId>
+            <artifactId>spock-core</artifactId>
+            <version>${spock.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.objenesis</groupId>
+            <artifactId>objenesis</artifactId>
+            <version>${objenesis.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib-nodep</artifactId>
+            <version>${cglib.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -102,6 +130,16 @@
                         <version>${groovy.version}</version>
                     </dependency>
                 </dependencies>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${surefire.plugin.version}</version>
+                <configuration>
+                    <includes>
+                        <include>**/*Test.java</include>
+                        <include>**/*Test.groovy</include>
+                    </includes>
+                </configuration>
             </plugin>
         </plugins>
     </build>

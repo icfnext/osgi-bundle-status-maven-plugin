@@ -8,7 +8,7 @@ import org.apache.maven.plugin.MojoFailureException;
  * @goal status
  * @phase verify
  */
-public final class OsgiBundleStatusPluginMojo extends AbstractMojo {
+public class OsgiBundleStatusPluginMojo extends AbstractMojo {
 
     /**
      * Symbolic name of OSGi bundle.
@@ -62,7 +62,7 @@ public final class OsgiBundleStatusPluginMojo extends AbstractMojo {
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
-        final BundleStatusChecker checker = new FelixBundleStatusChecker(this);
+        final BundleStatusChecker checker = FelixBundleStatusChecker.createFromMojo(this);
 
         checker.checkStatus(bundleSymbolicName);
     }

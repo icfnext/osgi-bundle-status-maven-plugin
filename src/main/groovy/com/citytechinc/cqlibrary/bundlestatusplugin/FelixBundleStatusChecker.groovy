@@ -17,27 +17,32 @@ final class FelixBundleStatusChecker implements BundleStatusChecker {
 
     private final def mojo
 
+    private final def restClient
+
     private final def log
 
-    private final def http
-
-    FelixBundleStatusChecker(OsgiBundleStatusPluginMojo mojo) {
-        this.mojo = mojo
-
-        log = mojo.log
-
+    static FelixBundleStatusChecker createFromMojo(mojo) {
         def host = mojo.host
         def port = mojo.port
 
-        log.info "Connecting to Felix Console : $host:$port"
+        mojo.log.info "Connecting to Felix Console : $host:$port"
 
-        http = new RESTClient("http://${host}:${port}")
+        def restClient = new RESTClient("http://$host:$port")
 
-        http.client.addRequestInterceptor(new HttpRequestInterceptor() {
+        restClient.client.addRequestInterceptor(new HttpRequestInterceptor() {
             void process(HttpRequest httpRequest, HttpContext httpContext) {
                 httpRequest.addHeader("Authorization", "Basic " + "${mojo.user}:${mojo.password}".toString().bytes.encodeBase64().toString())
             }
         })
+
+        new FelixBundleStatusChecker(mojo, restClient)
+    }
+
+    FelixBundleStatusChecker(mojo, restClient) {
+        this.mojo = mojo
+        this.restClient = restClient
+
+        log = mojo.log
     }
 
     @Override
@@ -77,7 +82,7 @@ final class FelixBundleStatusChecker implements BundleStatusChecker {
     private String getStatus(bundleSymbolicName) throws MojoExecutionException, MojoFailureException, IOException {
         def status = ""
 
-        http.get(path: "/system/console/bundles/.json") { response, json ->
+        restClient.get(path: "/system/console/bundles/.json") { response, json ->
             if (json) {
                 def data = json.data
 
