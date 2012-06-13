@@ -72,6 +72,8 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
         if (skip) {
             getLog().info("Skipping execute per configuration");
         } else {
+            // TODO: move to factory class if additional container
+            // implementations are added
             final BundleStatusChecker checker = FelixBundleStatusChecker.createFromMojo(this);
 
             checker.checkStatus(bundleSymbolicName);
