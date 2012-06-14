@@ -8,7 +8,7 @@
     <artifactId>maven-osgi-bundle-status-plugin</artifactId>
     <name>CITYTECH, Inc. CQ5 Library - Maven OSGi Bundle Status Plugin</name>
     <description>Remote bundle status checker for OSGi containers.</description>
-    <version>0.2-SNAPSHOT</version>
+    <version>0.2</version>
     <packaging>maven-plugin</packaging>
 
     <properties>
