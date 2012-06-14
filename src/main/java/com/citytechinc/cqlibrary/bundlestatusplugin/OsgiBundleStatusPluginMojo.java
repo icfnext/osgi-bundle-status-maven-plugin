@@ -77,7 +77,7 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         if (skip) {
-            getLog().info("Skipping execute per configuration");
+            getLog().info("Skipping execute per configuration.");
         } else {
             // TODO: move to factory class if additional container
             // implementations are added
