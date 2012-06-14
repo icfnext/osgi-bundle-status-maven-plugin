@@ -22,7 +22,7 @@ class FelixBundleStatusCheckerTest extends Specification {
         mojo.user >> 'admin'
         mojo.password >> 'admin'
         mojo.requiredStatus >> 'Active'
-        mojo.retryDelay >> 100
+        mojo.retryDelay >> 1
         mojo.retryLimit >> 5
         mojo.log >> Mock(Log)
     }
@@ -61,6 +61,34 @@ class FelixBundleStatusCheckerTest extends Specification {
 
         when:
         checker.checkStatus('other')
+
+        then:
+        thrown(MojoFailureException)
+    }
+
+    def "multiple bundles, fails on first"() {
+        setup:
+        def restClient = mockRestClient(5, JSON)
+
+        def checker = new FelixBundleStatusChecker(mojo, restClient)
+
+        when:
+        checker.checkStatus('bar')
+        checker.checkStatus('foo')
+
+        then:
+        thrown(MojoFailureException)
+    }
+
+    def "multiple bundles, fails on second"() {
+        setup:
+        def restClient = mockRestClient(6, JSON)
+
+        def checker = new FelixBundleStatusChecker(mojo, restClient)
+
+        when:
+        checker.checkStatus('foo')
+        checker.checkStatus('bar')
 
         then:
         thrown(MojoFailureException)
