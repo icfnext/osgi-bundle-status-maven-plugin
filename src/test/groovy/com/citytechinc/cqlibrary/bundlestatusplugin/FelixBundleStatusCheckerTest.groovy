@@ -13,23 +13,10 @@ class FelixBundleStatusCheckerTest extends Specification {
 
     static def JSON = [data: [[symbolicName: 'foo', state:'Active'], [symbolicName: 'bar', state:'Resolved']]]
 
-    def mojo
-
-    def setup() {
-        mojo = Mock(OsgiBundleStatusPluginMojo)
-        mojo.host >> 'localhost'
-        mojo.port >> '4502'
-        mojo.user >> 'admin'
-        mojo.password >> 'admin'
-        mojo.requiredStatus >> 'Active'
-        mojo.retryDelay >> 1
-        mojo.retryLimit >> 5
-        mojo.log >> Mock(Log)
-    }
-
     def "active bundle"() {
         setup:
-        def restClient = mockRestClient(0, JSON)
+        def restClient = createMockRestClient(0, JSON)
+        def mojo = createMockMojo()
 
         def checker = new FelixBundleStatusChecker(mojo, restClient)
 
@@ -40,9 +27,54 @@ class FelixBundleStatusCheckerTest extends Specification {
         notThrown(MojoFailureException)
     }
 
-    def "resolved bundle"() {
+    def "custom bundle status success"() {
         setup:
-        def restClient = mockRestClient(5, JSON)
+        def json = [data: [[symbolicName: 'foo', state:'Custom']]]
+
+        def restClient = createMockRestClient(0, json)
+        def mojo = createMockMojo('Custom', 5)
+
+        def checker = new FelixBundleStatusChecker(mojo, restClient)
+
+        when:
+        checker.checkStatus('foo')
+
+        then:
+        notThrown(MojoFailureException)
+    }
+
+    def "custom bundle status failure"() {
+        setup:
+        def restClient = createMockRestClient(5, JSON)
+        def mojo = createMockMojo('Custom', 5)
+
+        def checker = new FelixBundleStatusChecker(mojo, restClient)
+
+        when:
+        checker.checkStatus('foo')
+
+        then:
+        thrown(MojoFailureException)
+    }
+
+    def "resolved bundle 5 retries"() {
+        setup:
+        def restClient = createMockRestClient(5, JSON)
+        def mojo = createMockMojo()
+
+        def checker = new FelixBundleStatusChecker(mojo, restClient)
+
+        when:
+        checker.checkStatus('bar')
+
+        then:
+        thrown(MojoFailureException)
+    }
+
+    def "resolved bundle 10 retries"() {
+        setup:
+        def restClient = createMockRestClient(10, JSON)
+        def mojo = createMockMojo('Active', 10)
 
         def checker = new FelixBundleStatusChecker(mojo, restClient)
 
@@ -55,7 +87,8 @@ class FelixBundleStatusCheckerTest extends Specification {
 
     def "nonexistent bundle"() {
         setup:
-        def restClient = mockRestClient(0, JSON)
+        def restClient = createMockRestClient(0, JSON)
+        def mojo = createMockMojo()
 
         def checker = new FelixBundleStatusChecker(mojo, restClient)
 
@@ -68,7 +101,8 @@ class FelixBundleStatusCheckerTest extends Specification {
 
     def "multiple bundles, fails on first"() {
         setup:
-        def restClient = mockRestClient(5, JSON)
+        def restClient = createMockRestClient(5, JSON)
+        def mojo = createMockMojo()
 
         def checker = new FelixBundleStatusChecker(mojo, restClient)
 
@@ -82,7 +116,8 @@ class FelixBundleStatusCheckerTest extends Specification {
 
     def "multiple bundles, fails on second"() {
         setup:
-        def restClient = mockRestClient(6, JSON)
+        def restClient = createMockRestClient(6, JSON)
+        def mojo = createMockMojo()
 
         def checker = new FelixBundleStatusChecker(mojo, restClient)
 
@@ -96,7 +131,8 @@ class FelixBundleStatusCheckerTest extends Specification {
 
     def "empty response"() {
         setup:
-        def restClient = mockRestClient(0, [:])
+        def restClient = createMockRestClient(0, [:])
+        def mojo = createMockMojo()
 
         def checker = new FelixBundleStatusChecker(mojo, restClient)
 
@@ -107,7 +143,7 @@ class FelixBundleStatusCheckerTest extends Specification {
         thrown(MojoExecutionException)
     }
 
-    def mockRestClient(expectedRetryCount, json) {
+    def createMockRestClient(expectedRetryCount, json) {
         def restClient = Mock(RESTClient)
 
         def response = Mock(HttpResponseDecorator)
@@ -117,5 +153,35 @@ class FelixBundleStatusCheckerTest extends Specification {
         }
 
         restClient
+    }
+
+    def createMockMojo() {
+        def mojo = Mock(OsgiBundleStatusPluginMojo)
+
+        mojo.host >> 'localhost'
+        mojo.port >> '4502'
+        mojo.user >> 'admin'
+        mojo.password >> 'admin'
+        mojo.requiredStatus >> 'Active'
+        mojo.retryDelay >> 1
+        mojo.retryLimit >> 5
+        mojo.log >> Mock(Log)
+
+        mojo
+    }
+
+    def createMockMojo(requiredStatus, retryLimit) {
+        def mojo = Mock(OsgiBundleStatusPluginMojo)
+
+        mojo.host >> 'localhost'
+        mojo.port >> '4502'
+        mojo.user >> 'admin'
+        mojo.password >> 'admin'
+        mojo.requiredStatus >> requiredStatus
+        mojo.retryDelay >> 1
+        mojo.retryLimit >> retryLimit
+        mojo.log >> Mock(Log)
+
+        mojo
     }
 }
