@@ -1,4 +1,4 @@
-# Maven Felix Bundle Status Plugin
+# Maven OSGi Bundle Status Plugin
 
 [CITYTECH, Inc.](http://www.citytechinc.com)
 

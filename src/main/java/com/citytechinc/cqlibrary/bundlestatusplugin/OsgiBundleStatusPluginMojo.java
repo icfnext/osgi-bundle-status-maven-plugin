@@ -5,6 +5,8 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
 /**
+ * Check the status of bundle(s) in an OSGi container.
+ *
  * @goal status
  * @phase verify
  */

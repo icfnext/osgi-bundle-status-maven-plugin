@@ -87,7 +87,7 @@ class FelixBundleStatusCheckerTest extends Specification {
 
     def "nonexistent bundle"() {
         setup:
-        def restClient = createMockRestClient(0, JSON)
+        def restClient = createMockRestClient(5, JSON)
         def mojo = createMockMojo()
 
         def checker = new FelixBundleStatusChecker(mojo, restClient)

@@ -71,7 +71,9 @@ final class FelixBundleStatusChecker implements BundleStatusChecker {
             if (requiredStatus == status) {
                 log.info "$bundleSymbolicName is $status"
             } else {
-                throw new MojoFailureException("$bundleSymbolicName bundle status required to be $requiredStatus but is $status")
+                def msg = status ? "$bundleSymbolicName bundle status required to be $requiredStatus but is $status" : "Bundle not found : $bundleSymbolicName"
+
+                throw new MojoFailureException(msg)
             }
         } catch (IOException ioe) {
             throw new MojoExecutionException("Error getting bundle status from Felix Console", ioe)
@@ -89,8 +91,6 @@ final class FelixBundleStatusChecker implements BundleStatusChecker {
 
                 if (bundle) {
                     status = bundle.state
-                } else {
-                    throw new MojoFailureException("Bundle not found : $bundleSymbolicName")
                 }
             } else {
                 throw new MojoExecutionException("Error getting JSON response from Felix Console")
