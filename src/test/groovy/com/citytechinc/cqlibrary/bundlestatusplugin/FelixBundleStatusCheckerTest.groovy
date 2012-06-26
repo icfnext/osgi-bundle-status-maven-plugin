@@ -156,18 +156,7 @@ class FelixBundleStatusCheckerTest extends Specification {
     }
 
     def createMockMojo() {
-        def mojo = Mock(OsgiBundleStatusPluginMojo)
-
-        mojo.host >> 'localhost'
-        mojo.port >> '4502'
-        mojo.user >> 'admin'
-        mojo.password >> 'admin'
-        mojo.requiredStatus >> 'Active'
-        mojo.retryDelay >> 1
-        mojo.retryLimit >> 5
-        mojo.log >> Mock(Log)
-
-        mojo
+        createMockMojo('Active', 5)
     }
 
     def createMockMojo(requiredStatus, retryLimit) {

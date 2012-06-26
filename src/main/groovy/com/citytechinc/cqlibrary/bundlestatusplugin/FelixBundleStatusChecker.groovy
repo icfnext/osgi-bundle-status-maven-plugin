@@ -76,14 +76,14 @@ final class FelixBundleStatusChecker implements BundleStatusChecker {
                 throw new MojoFailureException(msg)
             }
         } catch (IOException ioe) {
-            throw new MojoExecutionException("Error getting bundle status from Felix Console", ioe)
+            throw new MojoExecutionException('Error getting bundle status from Felix Console', ioe)
         }
     }
 
     private String getStatus(bundleSymbolicName) throws MojoExecutionException, MojoFailureException, IOException {
-        def status = ""
+        def status = ''
 
-        restClient.get(path: "/system/console/bundles/.json") { response, json ->
+        restClient.get(path: '/system/console/bundles/.json') { response, json ->
             if (json) {
                 def data = json.data
 
@@ -93,7 +93,7 @@ final class FelixBundleStatusChecker implements BundleStatusChecker {
                     status = bundle.state
                 }
             } else {
-                throw new MojoExecutionException("Error getting JSON response from Felix Console")
+                throw new MojoExecutionException('Error getting JSON response from Felix Console')
             }
         }
 
