@@ -148,8 +148,8 @@ class FelixBundleStatusCheckerTest extends Specification {
 
         def response = Mock(HttpResponseDecorator)
 
-        (1 + expectedRetryCount) * restClient.get(_, _) >> {
-            it[1].call(response, json)
+        (1 + expectedRetryCount) * restClient.get(_, _) >> { url, closure ->
+            closure.call(response, json)
         }
 
         restClient
