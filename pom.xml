@@ -6,7 +6,7 @@
 
     <groupId>com.citytechinc.cqlibrary</groupId>
     <artifactId>maven-osgi-bundle-status-plugin</artifactId>
-    <name>CITYTECH, Inc. CQ5 Library - Maven OSGi Bundle Status Plugin</name>
+    <name>Maven OSGi Bundle Status Plugin</name>
     <description>Remote bundle status checker for OSGi containers.</description>
     <version>0.3-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
@@ -17,8 +17,6 @@
     </organization>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
         <!-- dependency versions -->
         <gmaven.version>1.4</gmaven.version>
         <gmaven.provider.version>1.8</gmaven.provider.version>
