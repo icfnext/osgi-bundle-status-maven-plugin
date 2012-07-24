@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.citytechinc.cqlibrary</groupId>
-    <artifactId>maven-osgi-bundle-status-plugin</artifactId>
+    <artifactId>osgi-bundle-status-maven-plugin</artifactId>
     <name>Maven OSGi Bundle Status Plugin</name>
     <description>Remote bundle status checker for OSGi containers.</description>
     <version>0.3.0-SNAPSHOT</version>
@@ -24,6 +24,11 @@
         </license>
     </licenses>
 
+    <issueManagement>
+        <system>jira</system>
+        <url>http://jira.someproject.org</url>
+    </issueManagement>
+
     <scm>
         <url>https://github.com/Citytechinc/maven-osgi-bundle-status-plugin</url>
         <connection>scm:git:git@github.com:Citytechinc/maven-osgi-bundle-status-plugin.git</connection>
@@ -31,6 +36,8 @@
     </scm>
 
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
         <!-- dependency versions -->
         <gmaven.version>1.4</gmaven.version>
         <gmaven.provider.version>1.8</gmaven.provider.version>
@@ -52,6 +59,7 @@
         <project.info.plugin.version>2.4</project.info.plugin.version>
         <javadoc.plugin.version>2.7</javadoc.plugin.version>
         <surefire.report.plugin.version>2.6</surefire.report.plugin.version>
+        <plugin.plugin.version>3.1</plugin.plugin.version>
     </properties>
 
     <build>
@@ -175,20 +183,21 @@
                     </reportPlugins>
                 </configuration>
             </plugin>
+            <plugin>
+                <artifactId>maven-plugin-plugin</artifactId>
+                <version>${plugin.plugin.version}</version>
+            </plugin>
         </plugins>
     </build>
 
-    <!--
     <reporting>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-plugin-plugin</artifactId>
-                <version>3.0</version>
+                <version>${plugin.plugin.version}</version>
             </plugin>
         </plugins>
     </reporting>
-    -->
 
     <dependencies>
         <!-- compile -->

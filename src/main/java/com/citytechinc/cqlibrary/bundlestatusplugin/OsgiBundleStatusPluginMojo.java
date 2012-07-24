@@ -65,7 +65,7 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
     /**
      * Skip execution of the plugin.
      *
-     * @parameter expression="${osgi.bundle.status.skip}" default-value="false"
+     * @parameter property="osgi.bundle.status.skip" default-value="false"
      */
     private boolean skip;
 
