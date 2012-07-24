@@ -3,77 +3,68 @@ package com.citytechinc.cqlibrary.bundlestatusplugin;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 
 /**
  * Check the status of bundle(s) in an OSGi container.
- *
- * @goal status
- * @phase verify
  */
+@Mojo(name = "status", defaultPhase = LifecyclePhase.VERIFY)
 public class OsgiBundleStatusPluginMojo extends AbstractMojo {
 
     /**
      * Symbolic names of OSGi bundles to check.
-     *
-     * @parameter
-     * @required
      */
+    @Parameter(required = true)
     private String[] bundleNames;
 
     /**
      * Felix container host name.
-     *
-     * @parameter default-value="localhost"
      */
+    @Parameter(defaultValue = "localhost")
     private String host;
 
     /**
      * Felix container password.
-     *
-     * @parameter default-value="admin"
      */
+    @Parameter(defaultValue = "admin")
     private String password;
 
     /**
      * Felix container port number.
-     *
-     * @parameter default-value="4502"
      */
+    @Parameter(defaultValue = "4502")
     private String port;
 
     /**
      * Required status for bundle(s) being checked. Defaults to "Active".
-     *
-     * @parameter default-value="Active"
      */
+    @Parameter(defaultValue = "Active")
     private String requiredStatus;
 
     /**
      * Delay in milliseconds before retrying bundle status check.
-     *
-     * @parameter default-value="1000"
      */
+    @Parameter(defaultValue = "1000")
     private Integer retryDelay;
 
     /**
      * Number of times to retry checking bundle status before aborting.
-     *
-     * @parameter default-value="5"
      */
+    @Parameter(defaultValue = "5")
     private Integer retryLimit;
 
     /**
      * Skip execution of the plugin.
-     *
-     * @parameter property="osgi.bundle.status.skip" default-value="false"
      */
+    @Parameter(property = "osgi.bundle.status.skip", defaultValue = "false")
     private boolean skip;
 
     /**
      * Felix container user name.
-     *
-     * @parameter default-value="admin"
      */
+    @Parameter(defaultValue = "admin")
     private String user;
 
     @Override
