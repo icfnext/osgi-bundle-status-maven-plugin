@@ -1,0 +1,58 @@
+ ------
+ Usage
+ ------
+ Mark Daugherty
+ ------
+ 2012-08-09
+
+Usage
+
+  The ${project.name} checks the status of one or more bundles in a remote OSGi container, such as
+  Apache Felix.  By default, the specified bundles are checked for status "Active", but any bundle
+  state can be specified.  If multiple bundle names are provided, the plugin execution will succeed
+  only if all named bundles match the expected status.
+
+* Configuration
+
+  Define the plugin in your project's <<<pom.xml>>> as follows:
+
++-----
+<project>
+    [...]
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.citytechinc.cqlibrary</groupId>
+                <artifactId>osgi-bundle-status-maven-plugin</artifactId>
+                <version>${project.version}</version>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>status</goal>
+                        </goals>
+                        <configuration>
+                            <bundleNames>
+                                <bundleName>groovy-all</bundleName>
+                            </bundleNames>
+                            <host>localhost</host>
+                            <port>4502</port>
+                            <user>admin</user>
+                            <password>admin</password>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    [...]
+</project>
++-----
+
+* Execution
+
+  The OSGi Bundle Status Plugin is typically executed as part of the build lifecycle in the <<<verify>>> phase to ensure that a bundle has been successfully installed to an OSGi container.
+
++-----
+  mvn install
++-----

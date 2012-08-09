@@ -22,19 +22,19 @@ class OsgiBundleStatusPluginMojo extends AbstractMojo {
     String[] bundleNames
 
     /**
-     * Felix container host name.
+     * OSGi container host name.
      */
     @Parameter(defaultValue = "localhost")
     String host
 
     /**
-     * Felix container password.
+     * OSGi container password.
      */
     @Parameter(defaultValue = "admin")
     String password
 
     /**
-     * Felix container port number.
+     * OSGi container port number.
      */
     @Parameter(defaultValue = "4502")
     String port
@@ -64,7 +64,7 @@ class OsgiBundleStatusPluginMojo extends AbstractMojo {
     boolean skip
 
     /**
-     * Felix container user name.
+     * OSGi container user name.
      */
     @Parameter(defaultValue = "admin")
     String user

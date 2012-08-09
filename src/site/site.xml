@@ -35,13 +35,10 @@
 
         <!--
         <menu name="Examples">
-            <item name="Using Java5 annotations" href="/examples/using-annotations.html" />
-            <item name="Configuring Generation of Plugin Descriptor" href="/examples/generate-descriptor.html" />
-            <item name="Configuring Generation of Plugin Documentation" href="/examples/generate-report.html" />
-            <item name="Configuring Generation of HelpMojo" href="/examples/generate-help.html" />
-            <item name="Ant Mojo" href="/examples/ant-mojo.html" />
-            <item name="Beanshell Mojo" href="/examples/beanshell-mojo.html" />
+            <item name="Checking the status of multiple OSGi bundles" href="/examples/multiple-bundles.html" />
         </menu>
         -->
+
+        <menu ref="reports" />
     </body>
 </project>
