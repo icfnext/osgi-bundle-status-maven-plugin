@@ -1,12 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project>
+<project xmlns="http://maven.apache.org/DECORATION/1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0 http://maven.apache.org/xsd/decoration-1.0.0.xsd">
+
+    <bannerLeft>
+        <name>${project.name}</name>
+        <src>http://maven.apache.org/images/apache-maven-project.png</src>
+        <href>http://maven.apache.org/</href>
+    </bannerLeft>
+    <bannerRight>
+        <src>http://maven.apache.org/images/maventxt_logo_200.gif</src>
+    </bannerRight>
+
+    <skin>
+        <groupId>org.apache.maven.skins</groupId>
+        <artifactId>maven-fluido-skin</artifactId>
+        <version>1.2.1</version>
+    </skin>
+
+    <custom>
+        <fluidoSkin>
+            <topBarEnabled>false</topBarEnabled>
+            <sideBarEnabled>true</sideBarEnabled>
+        </fluidoSkin>
+    </custom>
+
     <body>
         <menu name="Overview">
             <item name="Introduction" href="index.html" />
             <item name="Goals" href="plugin-info.html" />
             <item name="Usage" href="usage.html" />
-            <item name="FAQ" href="faq.html" />
+            <!-- <item name="Release Notes" href="jira-report.html" /> -->
         </menu>
-        <menu ref="reports" />
+
+        <!--
+        <menu name="Examples">
+            <item name="Using Java5 annotations" href="/examples/using-annotations.html" />
+            <item name="Configuring Generation of Plugin Descriptor" href="/examples/generate-descriptor.html" />
+            <item name="Configuring Generation of Plugin Documentation" href="/examples/generate-report.html" />
+            <item name="Configuring Generation of HelpMojo" href="/examples/generate-help.html" />
+            <item name="Ant Mojo" href="/examples/ant-mojo.html" />
+            <item name="Beanshell Mojo" href="/examples/beanshell-mojo.html" />
+        </menu>
+        -->
     </body>
 </project>

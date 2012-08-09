@@ -132,12 +132,14 @@
                         </goals>
                         <phase>site</phase>
                     </execution>
+                    <!--
                     <execution>
                         <id>help-goal</id>
                         <goals>
                             <goal>helpmojo</goal>
                         </goals>
                     </execution>
+                    -->
                 </executions>
             </plugin>
             <plugin>
@@ -217,6 +219,13 @@
             <plugin>
                 <artifactId>maven-plugin-plugin</artifactId>
                 <version>${plugin.plugin.version}</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>report</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
             </plugin>
         </plugins>
     </reporting>
