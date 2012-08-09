@@ -1,4 +1,6 @@
-package com.citytechinc.cqlibrary.bundlestatusplugin
+package com.citytechinc.cqlibrary.bundlestatusplugin.checker
+
+import com.citytechinc.cqlibrary.bundlestatusplugin.OsgiBundleStatusPluginMojo
 
 import groovyx.net.http.HttpResponseDecorator
 import groovyx.net.http.RESTClient

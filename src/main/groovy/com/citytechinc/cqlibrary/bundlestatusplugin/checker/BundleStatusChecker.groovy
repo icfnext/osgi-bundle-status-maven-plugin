@@ -1,4 +1,4 @@
-package com.citytechinc.cqlibrary.bundlestatusplugin
+package com.citytechinc.cqlibrary.bundlestatusplugin.checker
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
