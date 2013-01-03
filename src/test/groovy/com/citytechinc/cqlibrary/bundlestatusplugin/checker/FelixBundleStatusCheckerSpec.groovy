@@ -11,7 +11,7 @@ import org.apache.maven.plugin.logging.Log
 
 import spock.lang.Specification
 
-class FelixBundleStatusCheckerTest extends Specification {
+class FelixBundleStatusCheckerSpec extends Specification {
 
     static def JSON = [data: [[symbolicName: 'foo', state:'Active'], [symbolicName: 'bar', state:'Resolved']]]
 
