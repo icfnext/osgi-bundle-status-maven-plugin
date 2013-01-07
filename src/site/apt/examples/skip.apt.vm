@@ -1,0 +1,8 @@
+Skipping Verification
+
+    To skip execution of the plugin via command line, set the
+    <<osgi.bundle.status.skip>> property to <<true>>.
+
++---+
+mvn install -Dosgi.bundle.status.skip=true
++---+

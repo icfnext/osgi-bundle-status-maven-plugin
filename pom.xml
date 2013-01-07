@@ -4,7 +4,7 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.citytechinc.cqlibrary</groupId>
+    <groupId>com.citytechinc.maven.plugins</groupId>
     <artifactId>osgi-bundle-status-maven-plugin</artifactId>
     <name>Maven OSGi Bundle Status Plugin</name>
     <description>Remote bundle status checker for OSGi containers.</description>
