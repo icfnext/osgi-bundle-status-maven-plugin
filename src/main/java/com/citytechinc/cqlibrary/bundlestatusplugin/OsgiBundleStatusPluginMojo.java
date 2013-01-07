@@ -29,22 +29,22 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
     private String host;
 
     /**
-     * OSGi container password.
-     */
-    @Parameter(defaultValue = "admin")
-    private String password;
-
-    /**
      * OSGi container port number.
      */
     @Parameter(defaultValue = "4502")
     private String port;
 
     /**
-     * Required status for bundle(s) being checked. Defaults to "Active".
+     * OSGi container user name.
      */
-    @Parameter(defaultValue = "Active")
-    private String requiredStatus;
+    @Parameter(defaultValue = "admin")
+    private String user;
+
+    /**
+     * OSGi container password.
+     */
+    @Parameter(defaultValue = "admin")
+    private String password;
 
     /**
      * Delay in milliseconds before retrying bundle status check.
@@ -59,16 +59,16 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
     private Integer retryLimit;
 
     /**
+     * Required status for bundle(s) being checked.
+     */
+    @Parameter(defaultValue = "Active")
+    private String requiredStatus;
+
+    /**
      * Skip execution of the plugin.
      */
     @Parameter(property = "osgi.bundle.status.skip", defaultValue = "false")
     private boolean skip;
-
-    /**
-     * OSGi container user name.
-     */
-    @Parameter(defaultValue = "admin")
-    private String user;
 
     public void execute() throws MojoExecutionException, MojoFailureException {
         if (skip) {
