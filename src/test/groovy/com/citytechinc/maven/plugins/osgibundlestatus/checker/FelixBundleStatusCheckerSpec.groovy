@@ -1,19 +1,16 @@
-package com.citytechinc.cqlibrary.bundlestatusplugin.checker
+package com.citytechinc.maven.plugins.osgibundlestatus.checker
 
-import com.citytechinc.cqlibrary.bundlestatusplugin.OsgiBundleStatusPluginMojo
-
+import com.citytechinc.maven.plugins.osgibundlestatus.OsgiBundleStatusPluginMojo
 import groovyx.net.http.HttpResponseDecorator
 import groovyx.net.http.RESTClient
-
 import org.apache.maven.plugin.MojoExecutionException
 import org.apache.maven.plugin.MojoFailureException
 import org.apache.maven.plugin.logging.Log
-
 import spock.lang.Specification
 
 class FelixBundleStatusCheckerSpec extends Specification {
 
-    static def JSON = [data: [[symbolicName: 'foo', state:'Active'], [symbolicName: 'bar', state:'Resolved']]]
+    static def JSON = [data: [[symbolicName: 'foo', state: 'Active'], [symbolicName: 'bar', state: 'Resolved']]]
 
     def "active bundle"() {
         setup:
@@ -31,7 +28,7 @@ class FelixBundleStatusCheckerSpec extends Specification {
 
     def "custom bundle status success"() {
         setup:
-        def json = [data: [[symbolicName: 'foo', state:'Custom']]]
+        def json = [data: [[symbolicName: 'foo', state: 'Custom']]]
 
         def restClient = createMockRestClient(0, json)
         def mojo = createMockMojo('Custom', 5)

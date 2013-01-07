@@ -1,14 +1,13 @@
-package com.citytechinc.cqlibrary.bundlestatusplugin;
+package com.citytechinc.maven.plugins.osgibundlestatus;
 
+import com.citytechinc.maven.plugins.osgibundlestatus.checker.BundleStatusChecker;
+import com.citytechinc.maven.plugins.osgibundlestatus.checker.FelixBundleStatusChecker;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-
-import com.citytechinc.cqlibrary.bundlestatusplugin.checker.BundleStatusChecker;
-import com.citytechinc.cqlibrary.bundlestatusplugin.checker.FelixBundleStatusChecker;
 
 /**
  * Check the status of bundle(s) in an OSGi container.
@@ -70,11 +69,12 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
     @Parameter(property = "osgi.bundle.status.skip", defaultValue = "false")
     private boolean skip;
 
+    @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         if (skip) {
             getLog().info("Skipping execute per configuration.");
         } else {
-            final BundleStatusChecker checker = FelixBundleStatusChecker.createFromMojo(this);
+            final BundleStatusChecker checker = new FelixBundleStatusChecker(this);
 
             for (final String bundleName : bundleNames) {
                 checker.checkStatus(bundleName);
@@ -86,16 +86,16 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
         return host;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public String getPort() {
         return port;
     }
 
-    public String getRequiredStatus() {
-        return requiredStatus;
+    public String getUser() {
+        return user;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public Integer getRetryDelay() {
@@ -106,11 +106,7 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
         return retryLimit;
     }
 
-    public boolean isSkip() {
-        return skip;
-    }
-
-    public String getUser() {
-        return user;
+    public String getRequiredStatus() {
+        return requiredStatus;
     }
 }

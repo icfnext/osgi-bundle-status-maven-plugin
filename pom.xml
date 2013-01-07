@@ -6,7 +6,7 @@
 
     <groupId>com.citytechinc.maven.plugins</groupId>
     <artifactId>osgi-bundle-status-maven-plugin</artifactId>
-    <name>Maven OSGi Bundle Status Plugin</name>
+    <name>OSGi Bundle Status Maven Plugin</name>
     <description>Remote bundle status checker for OSGi containers.</description>
     <version>0.3.0-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
@@ -16,7 +16,7 @@
         <url>http://www.citytechinc.com</url>
     </organization>
 
-    <url>http://citytechinc.github.com/maven-osgi-bundle-status-plugin</url>
+    <url>http://citytechinc.github.com/osgi-bundle-status-maven-plugin</url>
 
     <developers>
         <developer>
@@ -34,20 +34,21 @@
     </licenses>
 
     <scm>
-        <url>https://github.com/Citytechinc/maven-osgi-bundle-status-plugin</url>
-        <connection>scm:git:git@github.com:Citytechinc/maven-osgi-bundle-status-plugin.git</connection>
-        <developerConnection>scm:git:git@github.com:Citytechinc/maven-osgi-bundle-status-plugin.git</developerConnection>
+        <url>https://github.com/Citytechinc/osgi-bundle-status-maven-plugin</url>
+        <connection>scm:git:git@github.com:Citytechinc/osgi-bundle-status-maven-plugin.git</connection>
+        <developerConnection>scm:git:git@github.com:Citytechinc/osgi-bundle-status-maven-plugin.git</developerConnection>
     </scm>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- dependency versions -->
-        <groovy.version>2.0.6</groovy.version>
+        <groovy.version>2.0.5</groovy.version>
         <groovy.http-builder.version>0.5.2</groovy.http-builder.version>
         <maven.plugin.api.version>3.0.4</maven.plugin.api.version>
+        <maven.plugin.annotations.version>3.1</maven.plugin.annotations.version>
+        <plexus.utils.version>3.0.1</plexus.utils.version>
         <httpcore.version>4.0.1</httpcore.version>
-        <junit.version>4.10</junit.version>
         <spock.version>0.7-groovy-2.0</spock.version>
         <cglib.version>2.2</cglib.version>
         <objenesis.version>1.2</objenesis.version>
@@ -165,7 +166,6 @@
                                     <reports>
                                         <report>dependencies</report>
                                         <report>index</report>
-                                        <!--<report>issue-tracking</report>-->
                                         <report>license</report>
                                         <report>plugins</report>
                                         <report>project-team</report>
@@ -185,17 +185,6 @@
         </plugins>
     </build>
 
-<!--
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>2.6</version>
-            </plugin>
-        </plugins>
-    </reporting>
- -->
     <dependencies>
         <!-- compile -->
         <dependency>
@@ -206,12 +195,12 @@
         <dependency>
             <groupId>org.apache.maven.plugin-tools</groupId>
             <artifactId>maven-plugin-annotations</artifactId>
-            <version>3.1</version>
+            <version>${maven.plugin.annotations.version}</version>
         </dependency>
         <dependency>
             <groupId>org.codehaus.plexus</groupId>
             <artifactId>plexus-utils</artifactId>
-            <version>3.0.1</version>
+            <version>${plexus.utils.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -236,12 +225,6 @@
         </dependency>
 
         <!-- test -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>org.spockframework</groupId>
             <artifactId>spock-core</artifactId>

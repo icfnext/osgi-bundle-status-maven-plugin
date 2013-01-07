@@ -1,69 +1,80 @@
-package com.citytechinc.cqlibrary.bundlestatusplugin.checker
-
-import groovy.json.JsonSlurper
+package com.citytechinc.maven.plugins.osgibundlestatus.checker
 
 import groovyx.net.http.RESTClient
-
 import org.apache.http.HttpRequest
 import org.apache.http.HttpRequestInterceptor
 import org.apache.http.protocol.HttpContext
-import org.apache.maven.plugin.Mojo
 import org.apache.maven.plugin.MojoExecutionException
 import org.apache.maven.plugin.MojoFailureException
 
-final class FelixBundleStatusChecker implements BundleStatusChecker {
+class FelixBundleStatusChecker implements BundleStatusChecker {
 
-    private final def mojo
+    def host
 
-    private final def restClient
+    def port
 
-    private final def log
+    def user
 
-    static FelixBundleStatusChecker createFromMojo(mojo) {
-        def host = mojo.host
-        def port = mojo.port
+    def password
 
-        mojo.log.info "Connecting to Felix Console @ $host:$port"
+    def retryDelay
 
-        def restClient = new RESTClient("http://$host:$port")
+    def retryLimit
+
+    def requiredStatus
+
+    def log
+
+    def restClient
+
+    FelixBundleStatusChecker(mojo) {
+        host = mojo.host
+        port = mojo.port
+        user = mojo.user
+        password = mojo.password
+        retryDelay = mojo.retryDelay
+        retryLimit = mojo.retryLimit
+        requiredStatus = mojo.requiredStatus
+        log = mojo.log
+
+        restClient = new RESTClient("http://$host:$port")
 
         restClient.client.addRequestInterceptor(new HttpRequestInterceptor() {
             void process(HttpRequest httpRequest, HttpContext httpContext) {
-                httpRequest.addHeader("Authorization", "Basic " + "${mojo.user}:${mojo.password}".toString().bytes.encodeBase64().toString())
+                httpRequest.addHeader("Authorization", "Basic " + "$user:$password".toString().bytes.encodeBase64().toString())
             }
         })
-
-        new FelixBundleStatusChecker(mojo, restClient)
     }
 
     FelixBundleStatusChecker(mojo, restClient) {
-        this.mojo = mojo
-        this.restClient = restClient
-
+        host = mojo.host
+        port = mojo.port
+        user = mojo.user
+        password = mojo.password
+        retryDelay = mojo.retryDelay
+        retryLimit = mojo.retryLimit
+        requiredStatus = mojo.requiredStatus
         log = mojo.log
+
+        this.restClient = restClient
     }
 
     @Override
     void checkStatus(bundleSymbolicName) throws MojoExecutionException, MojoFailureException {
         log.info "Checking OSGi bundle status: $bundleSymbolicName"
 
-        def requiredStatus = mojo.requiredStatus
-        def delay = mojo.retryDelay
-        def limit = mojo.retryLimit
-
         try {
-            def status = ''
-
+            def status = ""
             def retryCount = 0
 
-            while (requiredStatus != status && retryCount <= limit) {
+            while (requiredStatus != status && retryCount <= retryLimit) {
                 if (retryCount > 0) {
                     log.info "Bundle is $status, retrying..."
                 }
 
                 status = getStatus(bundleSymbolicName)
 
-                Thread.sleep(delay)
+                Thread.sleep(retryDelay)
 
                 retryCount++
             }
@@ -75,15 +86,15 @@ final class FelixBundleStatusChecker implements BundleStatusChecker {
 
                 throw new MojoFailureException(msg)
             }
-        } catch (IOException ioe) {
-            throw new MojoExecutionException('Error getting bundle status from Felix Console', ioe)
+        } catch (IOException e) {
+            throw new MojoExecutionException("Error getting bundle status from Felix Console", e)
         }
     }
 
     private String getStatus(bundleSymbolicName) throws MojoExecutionException, MojoFailureException, IOException {
-        def status = ''
+        def status = ""
 
-        restClient.get(path: '/system/console/bundles/.json') { response, json ->
+        restClient.get(path: "/system/console/bundles/.json") { response, json ->
             if (json) {
                 def data = json.data
 
@@ -93,7 +104,7 @@ final class FelixBundleStatusChecker implements BundleStatusChecker {
                     status = bundle.state
                 }
             } else {
-                throw new MojoExecutionException('Error getting JSON response from Felix Console')
+                throw new MojoExecutionException("Error getting JSON response from Felix Console")
             }
         }
 

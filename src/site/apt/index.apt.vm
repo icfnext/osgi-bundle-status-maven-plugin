@@ -1,34 +1,36 @@
 ${project.name}
 
- The ${project.name} is used during the <<<verify>>> phase of the build
- lifecycle to check the status of one of more bundles in an OSGi
- container, such as {{{http://felix.apache.org/}Apache Felix}}.  The plugin
- expects the OSGi container to be running at build time in order to connect
- and perform the check remotely.  A typical use case for the plugin would be
- to verify that an OSGi bundle that is deployed by the project is running as
- expected after a successful build.
+    The ${project.name} is used during the <<<verify>>> phase of the build
+    lifecycle to check the status of one or more bundles in an OSGi
+    container, such as {{{http://felix.apache.org/}Apache Felix}}.  The plugin
+    expects the OSGi container to be running at build time in order to connect
+    and perform the check remotely.  A typical use case for the plugin would be
+    to verify that an OSGi bundle that is deployed by the project is running as
+    expected after a successful build.
+
+    Currently, Apache Felix is the only supported OSGi container.
 
 * Goals
 
-   The plugin has only one goal:
+    The plugin has only one goal:
 
-   * {{{./status-mojo.html}osgi-bundle-status:status}} checks the status of
-   bundle(s) in a remote OSGi container.
+    * {{{./status-mojo.html}osgi-bundle-status:status}} checks the status of
+    bundle(s) in a remote OSGi container.
 
-   []
+    []
 
 * Usage
 
-  Instructions on how to use the plugin can be found on the
-  {{{./usage.html}usage page}}.  More specific use cases are detailed in the
-  examples provided below.
+    Instructions on how to use the plugin can be found on the
+    {{{./usage.html}usage page}}.  More specific use cases are detailed in the
+    examples provided below.
 
 * Examples
 
-   The following examples demonstrate how to use the plugin in both basic and advanced use cases:
+    The following examples demonstrate how to use the plugin in both basic and advanced use cases:
 
-   * {{{./examples/basic.html}Basic}}
+    * {{{./examples/basic.html}Basic}}
 
-   * {{{./examples/advanced.html}Advanced}}
+    * {{{./examples/advanced.html}Advanced}}
 
-   []
+    []
