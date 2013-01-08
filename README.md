@@ -1,4 +1,4 @@
-# Maven OSGi Bundle Status Plugin
+# OSGi Bundle Status Maven Plugin
 
 [CITYTECH, Inc.](http://www.citytechinc.com)
 
