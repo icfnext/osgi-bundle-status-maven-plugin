@@ -98,10 +98,14 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
             if (json) {
                 def data = json.data
 
-                def bundle = data.find { it.symbolicName == bundleSymbolicName }
+                if (data) {
+                    def bundle = data.find { it.symbolicName == bundleSymbolicName }
 
-                if (bundle) {
-                    status = bundle.state
+                    if (bundle) {
+                        status = bundle.state
+                    }
+                } else {
+                    throw new MojoExecutionException("Invalid JSON response from Felix Console")
                 }
             } else {
                 throw new MojoExecutionException("Error getting JSON response from Felix Console")
