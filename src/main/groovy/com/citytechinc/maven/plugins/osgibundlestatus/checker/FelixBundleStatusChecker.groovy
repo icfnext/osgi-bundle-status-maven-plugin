@@ -13,7 +13,7 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
 
     def port
 
-    def user
+    def username
 
     def password
 
@@ -30,7 +30,7 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
     FelixBundleStatusChecker(mojo) {
         host = mojo.host
         port = mojo.port
-        user = mojo.user
+        username = mojo.username
         password = mojo.password
         retryDelay = mojo.retryDelay
         retryLimit = mojo.retryLimit
@@ -41,7 +41,7 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
 
         restClient.client.addRequestInterceptor(new HttpRequestInterceptor() {
             void process(HttpRequest httpRequest, HttpContext httpContext) {
-                httpRequest.addHeader("Authorization", "Basic " + "$user:$password".toString().bytes.encodeBase64().toString())
+                httpRequest.addHeader("Authorization", "Basic " + "$username:$password".toString().bytes.encodeBase64().toString())
             }
         })
     }
@@ -49,7 +49,7 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
     FelixBundleStatusChecker(mojo, restClient) {
         host = mojo.host
         port = mojo.port
-        user = mojo.user
+        username = mojo.username
         password = mojo.password
         retryDelay = mojo.retryDelay
         retryLimit = mojo.retryLimit

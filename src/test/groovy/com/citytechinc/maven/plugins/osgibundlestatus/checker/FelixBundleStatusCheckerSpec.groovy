@@ -163,7 +163,7 @@ class FelixBundleStatusCheckerSpec extends Specification {
 
         mojo.host >> 'localhost'
         mojo.port >> '4502'
-        mojo.user >> 'admin'
+        mojo.username >> 'admin'
         mojo.password >> 'admin'
         mojo.requiredStatus >> requiredStatus
         mojo.retryDelay >> 1

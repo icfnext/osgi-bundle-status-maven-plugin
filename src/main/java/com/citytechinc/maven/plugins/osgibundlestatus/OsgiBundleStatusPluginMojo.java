@@ -37,7 +37,7 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
      * OSGi container user name.
      */
     @Parameter(defaultValue = "admin")
-    private String user;
+    private String username;
 
     /**
      * OSGi container password.
@@ -90,8 +90,8 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
         return port;
     }
 
-    public String getUser() {
-        return user;
+    public String getUsername() {
+        return username;
     }
 
     public String getPassword() {
