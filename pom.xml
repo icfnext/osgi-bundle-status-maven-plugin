@@ -63,6 +63,7 @@
         <surefire.report.plugin.version>2.13</surefire.report.plugin.version>
         <plugin.plugin.version>3.2</plugin.plugin.version>
         <gpg.plugin.version>1.4</gpg.plugin.version>
+        <nexus.plugin.version>1.7</nexus.plugin.version>
     </properties>
 
     <profiles>
@@ -205,6 +206,16 @@
                             <version>${surefire.report.plugin.version}</version>
                         </plugin>
                     </reportPlugins>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-maven-plugin</artifactId>
+                <version>${nexus.plugin.version}</version>
+                <configuration>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <repositoryId>sonatype-nexus-staging</repositoryId>
+                    <serverAuthId>sonatype-nexus-staging</serverAuthId>
                 </configuration>
             </plugin>
         </plugins>
