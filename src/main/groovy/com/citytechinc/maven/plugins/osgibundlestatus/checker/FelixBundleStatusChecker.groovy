@@ -9,23 +9,25 @@ import org.apache.maven.plugin.MojoFailureException
 
 class FelixBundleStatusChecker implements BundleStatusChecker {
 
-    def host
+    final def host
 
-    def port
+    final def port
 
-    def username
+    final def username
 
-    def password
+    final def password
 
-    def retryDelay
+    final def retryDelay
 
-    def retryLimit
+    final def retryLimit
 
-    def requiredStatus
+    final def requiredStatus
 
-    def log
+    final def log
 
-    def restClient
+    final def restClient
+
+    def json
 
     FelixBundleStatusChecker(mojo) {
         host = mojo.host
@@ -40,6 +42,7 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
         restClient = new RESTClient("http://$host:$port")
 
         restClient.client.addRequestInterceptor(new HttpRequestInterceptor() {
+            @Override
             void process(HttpRequest httpRequest, HttpContext httpContext) {
                 httpRequest.addHeader("Authorization", "Basic " + "$username:$password".toString().bytes.encodeBase64().toString())
             }
@@ -84,20 +87,19 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
         }
     }
 
-    private String getStatus(String bundleSymbolicName) {
-        def status = ""
+    def getStatus(String bundleSymbolicName) {
+        def status = getRemoteBundleStatus(bundleSymbolicName, false)
+
         def retryCount = 0
 
-        while (requiredStatus != status && retryCount <= retryLimit) {
-            if (retryCount > 0) {
-                if (status) {
-                    log.info "Bundle is $status, retrying..."
-                } else {
-                    log.info "Bundle not found, retrying..."
-                }
+        while (requiredStatus != status && retryCount < retryLimit) {
+            if (status) {
+                log.info "Bundle is $status, retrying..."
+            } else {
+                log.info "Bundle not found, retrying..."
             }
 
-            status = getRemoteBundleStatus(bundleSymbolicName)
+            status = getRemoteBundleStatus(bundleSymbolicName, true)
 
             Thread.sleep(retryDelay)
 
@@ -107,19 +109,31 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
         status
     }
 
-    private String getRemoteBundleStatus(String bundleSymbolicName) throws MojoExecutionException, MojoFailureException, IOException {
-        def status = ""
+    def getRemoteBundleStatus(String bundleSymbolicName, boolean force) {
+        def status = null
+
+        if (!json || force) {
+            json = getBundleStatusJson()
+        }
+
+        def bundle = json.find { it.symbolicName == bundleSymbolicName }
+
+        if (bundle) {
+            status = bundle.state
+        }
+
+        status
+    }
+
+    def getBundleStatusJson() {
+        def bundleStatusJson = null
 
         restClient.get(path: "/system/console/bundles/.json") { response, json ->
             if (json) {
                 def data = json.data
 
                 if (data) {
-                    def bundle = data.find { it.symbolicName == bundleSymbolicName }
-
-                    if (bundle) {
-                        status = bundle.state
-                    }
+                    bundleStatusJson = data
                 } else {
                     throw new MojoExecutionException("Invalid JSON response from Felix Console")
                 }
@@ -128,6 +142,6 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
             }
         }
 
-        status
+        bundleStatusJson
     }
 }
