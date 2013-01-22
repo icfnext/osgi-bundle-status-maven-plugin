@@ -69,7 +69,11 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
 
             while (requiredStatus != status && retryCount <= retryLimit) {
                 if (retryCount > 0) {
-                    log.info "Bundle is $status, retrying..."
+                    if (status) {
+                        log.info "Bundle is $status, retrying..."
+                    } else {
+                        log.info "Bundle not found, retrying..."
+                    }
                 }
 
                 status = getStatus(bundleSymbolicName)
