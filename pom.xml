@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
@@ -8,7 +8,7 @@
     <artifactId>osgi-bundle-status-maven-plugin</artifactId>
     <name>OSGi Bundle Status Maven Plugin</name>
     <description>Remote bundle status checker for OSGi containers.</description>
-    <version>0.3.0</version>
+    <version>0.4.0</version>
     <packaging>maven-plugin</packaging>
 
     <organization>
@@ -43,11 +43,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- dependency versions -->
-        <groovy.version>2.0.5</groovy.version>
-        <groovy.http-builder.version>0.5.2</groovy.http-builder.version>
         <maven.plugin.api.version>3.0.4</maven.plugin.api.version>
         <maven.plugin.annotations.version>3.1</maven.plugin.annotations.version>
-        <plexus.utils.version>3.0.1</plexus.utils.version>
+        <groovy.version>2.0.5</groovy.version>
+        <groovy.http-builder.version>0.5.2</groovy.http-builder.version>
         <httpcore.version>4.0.1</httpcore.version>
         <spock.version>0.7-groovy-2.0</spock.version>
         <cglib.version>2.2</cglib.version>
@@ -57,12 +56,15 @@
         <compiler.version>1.6</compiler.version>
         <compiler.plugin.version>2.3.2</compiler.plugin.version>
         <groovy.eclipse.compiler.version>2.7.0-01</groovy.eclipse.compiler.version>
+        <groovy.eclipse.batch.version>2.0.4-04</groovy.eclipse.batch.version>
         <surefire.plugin.version>2.13</surefire.plugin.version>
         <site.plugin.version>3.2</site.plugin.version>
         <github.site.plugin.version>0.7</github.site.plugin.version>
         <project.info.plugin.version>2.6</project.info.plugin.version>
         <surefire.report.plugin.version>2.13</surefire.report.plugin.version>
         <plugin.plugin.version>3.2</plugin.plugin.version>
+        <gpg.plugin.version>1.4</gpg.plugin.version>
+        <nexus.plugin.version>1.7</nexus.plugin.version>
     </properties>
 
     <profiles>
@@ -80,7 +82,7 @@
                         <artifactId>site-maven-plugin</artifactId>
                         <version>${github.site.plugin.version}</version>
                         <configuration>
-                            <message>building site for ${project.version}</message>
+                            <message>site for ${project.version}</message>
                             <server>github</server>
                         </configuration>
                         <executions>
@@ -89,6 +91,31 @@
                                     <goal>site</goal>
                                 </goals>
                                 <phase>site</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>sign-artifacts</id>
+            <activation>
+                <property>
+                    <name>sign-artifacts</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>${gpg.plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
                             </execution>
                         </executions>
                     </plugin>
@@ -113,6 +140,11 @@
                         <groupId>org.codehaus.groovy</groupId>
                         <artifactId>groovy-eclipse-compiler</artifactId>
                         <version>${groovy.eclipse.compiler.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy-eclipse-batch</artifactId>
+                        <version>${groovy.eclipse.batch.version}</version>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -182,6 +214,16 @@
                     </reportPlugins>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-maven-plugin</artifactId>
+                <version>${nexus.plugin.version}</version>
+                <configuration>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <repositoryId>sonatype-nexus-staging</repositoryId>
+                    <serverAuthId>sonatype-nexus-staging</serverAuthId>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
@@ -196,11 +238,6 @@
             <groupId>org.apache.maven.plugin-tools</groupId>
             <artifactId>maven-plugin-annotations</artifactId>
             <version>${maven.plugin.annotations.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.plexus</groupId>
-            <artifactId>plexus-utils</artifactId>
-            <version>${plexus.utils.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>

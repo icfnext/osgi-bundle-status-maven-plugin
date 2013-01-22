@@ -25,6 +25,10 @@ Advanced
                                 <bundleName>groovy-all</bundleName>
                                 <bundleName>com.google.guava</bundleName>
                             </bundleNames>
+                            <host>1.1.1.1</host>
+                            <port>8080</port>
+                            <username>administrator</username>
+                            <password>adm1ni$tr8t0r</password>
                         </configuration>
                     </execution>
                     <execution>

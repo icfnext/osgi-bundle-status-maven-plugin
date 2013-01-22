@@ -1,4 +1,4 @@
-# Maven OSGi Bundle Status Plugin
+# OSGi Bundle Status Maven Plugin
 
 [CITYTECH, Inc.](http://www.citytechinc.com)
 
@@ -8,7 +8,7 @@ Follows [Semantic Versioning](http://semver.org/) guidelines.
 
 ## License
 
-Copyright 2012 CITYTECH, Inc.
+Copyright 2013 CITYTECH, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

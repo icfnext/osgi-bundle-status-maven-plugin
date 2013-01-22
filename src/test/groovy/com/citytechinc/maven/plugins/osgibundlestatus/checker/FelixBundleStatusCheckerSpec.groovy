@@ -14,7 +14,7 @@ class FelixBundleStatusCheckerSpec extends Specification {
 
     def "active bundle"() {
         setup:
-        def restClient = createMockRestClient(0, JSON)
+        def restClient = createMockRestClient(1, JSON)
         def mojo = createMockMojo()
 
         def checker = new FelixBundleStatusChecker(mojo, restClient)
@@ -30,7 +30,7 @@ class FelixBundleStatusCheckerSpec extends Specification {
         setup:
         def json = [data: [[symbolicName: 'foo', state: 'Custom']]]
 
-        def restClient = createMockRestClient(0, json)
+        def restClient = createMockRestClient(1, json)
         def mojo = createMockMojo('Custom', 5)
 
         def checker = new FelixBundleStatusChecker(mojo, restClient)
@@ -44,7 +44,7 @@ class FelixBundleStatusCheckerSpec extends Specification {
 
     def "custom bundle status failure"() {
         setup:
-        def restClient = createMockRestClient(5, JSON)
+        def restClient = createMockRestClient(6, JSON)
         def mojo = createMockMojo('Custom', 5)
 
         def checker = new FelixBundleStatusChecker(mojo, restClient)
@@ -58,7 +58,7 @@ class FelixBundleStatusCheckerSpec extends Specification {
 
     def "resolved bundle 5 retries"() {
         setup:
-        def restClient = createMockRestClient(5, JSON)
+        def restClient = createMockRestClient(6, JSON)
         def mojo = createMockMojo()
 
         def checker = new FelixBundleStatusChecker(mojo, restClient)
@@ -72,7 +72,7 @@ class FelixBundleStatusCheckerSpec extends Specification {
 
     def "resolved bundle 10 retries"() {
         setup:
-        def restClient = createMockRestClient(10, JSON)
+        def restClient = createMockRestClient(11, JSON)
         def mojo = createMockMojo('Active', 10)
 
         def checker = new FelixBundleStatusChecker(mojo, restClient)
@@ -86,7 +86,7 @@ class FelixBundleStatusCheckerSpec extends Specification {
 
     def "nonexistent bundle"() {
         setup:
-        def restClient = createMockRestClient(5, JSON)
+        def restClient = createMockRestClient(6, JSON)
         def mojo = createMockMojo()
 
         def checker = new FelixBundleStatusChecker(mojo, restClient)
@@ -98,9 +98,26 @@ class FelixBundleStatusCheckerSpec extends Specification {
         thrown(MojoFailureException)
     }
 
+    def "multiple bundles"() {
+        setup:
+        def json = [data: [[symbolicName: 'foo', state: 'Active'], [symbolicName: 'bar', state: 'Active']]]
+
+        def restClient = createMockRestClient(1, json)
+        def mojo = createMockMojo()
+
+        def checker = new FelixBundleStatusChecker(mojo, restClient)
+
+        when:
+        checker.checkStatus('foo')
+        checker.checkStatus('bar')
+
+        then:
+        notThrown(MojoFailureException)
+    }
+
     def "multiple bundles, fails on first"() {
         setup:
-        def restClient = createMockRestClient(5, JSON)
+        def restClient = createMockRestClient(6, JSON)
         def mojo = createMockMojo()
 
         def checker = new FelixBundleStatusChecker(mojo, restClient)
@@ -130,7 +147,7 @@ class FelixBundleStatusCheckerSpec extends Specification {
 
     def "empty response"() {
         setup:
-        def restClient = createMockRestClient(0, [:])
+        def restClient = createMockRestClient(1, [:])
         def mojo = createMockMojo()
 
         def checker = new FelixBundleStatusChecker(mojo, restClient)
@@ -142,12 +159,12 @@ class FelixBundleStatusCheckerSpec extends Specification {
         thrown(MojoExecutionException)
     }
 
-    def createMockRestClient(expectedRetryCount, json) {
+    def createMockRestClient(expectedExecutions, json) {
         def restClient = Mock(RESTClient)
 
         def response = Mock(HttpResponseDecorator)
 
-        (1 + expectedRetryCount) * restClient.get(_, _) >> { url, closure ->
+        expectedExecutions * restClient.get(_, _) >> { url, closure ->
             closure.call(response, json)
         }
 
@@ -163,7 +180,7 @@ class FelixBundleStatusCheckerSpec extends Specification {
 
         mojo.host >> 'localhost'
         mojo.port >> '4502'
-        mojo.user >> 'admin'
+        mojo.username >> 'admin'
         mojo.password >> 'admin'
         mojo.requiredStatus >> requiredStatus
         mojo.retryDelay >> 1
