@@ -5,5 +5,5 @@ import org.apache.maven.plugin.MojoFailureException
 
 interface BundleStatusChecker {
 
-    void checkStatus(bundleSymbolicName) throws MojoExecutionException, MojoFailureException
+    void checkStatus(String bundleSymbolicName) throws MojoExecutionException, MojoFailureException
 }

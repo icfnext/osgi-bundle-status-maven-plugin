@@ -60,33 +60,22 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
     }
 
     @Override
-    void checkStatus(bundleSymbolicName) throws MojoExecutionException, MojoFailureException {
+    void checkStatus(String bundleSymbolicName) throws MojoExecutionException, MojoFailureException {
         log.info "Checking OSGi bundle status: $bundleSymbolicName"
 
         try {
-            def status = ""
-            def retryCount = 0
-
-            while (requiredStatus != status && retryCount <= retryLimit) {
-                if (retryCount > 0) {
-                    if (status) {
-                        log.info "Bundle is $status, retrying..."
-                    } else {
-                        log.info "Bundle not found, retrying..."
-                    }
-                }
-
-                status = getStatus(bundleSymbolicName)
-
-                Thread.sleep(retryDelay)
-
-                retryCount++
-            }
+            def status = getStatus(bundleSymbolicName)
 
             if (requiredStatus == status) {
                 log.info "$bundleSymbolicName is $status"
             } else {
-                def msg = status ? "$bundleSymbolicName bundle status required to be $requiredStatus but is $status" : "Bundle not found : $bundleSymbolicName"
+                def msg
+
+                if (status) {
+                    msg = "$bundleSymbolicName bundle status required to be $requiredStatus but is $status"
+                } else {
+                    msg = "Bundle not found: $bundleSymbolicName"
+                }
 
                 throw new MojoFailureException(msg)
             }
@@ -95,7 +84,30 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
         }
     }
 
-    private String getStatus(bundleSymbolicName) throws MojoExecutionException, MojoFailureException, IOException {
+    private String getStatus(String bundleSymbolicName) {
+        def status = ""
+        def retryCount = 0
+
+        while (requiredStatus != status && retryCount <= retryLimit) {
+            if (retryCount > 0) {
+                if (status) {
+                    log.info "Bundle is $status, retrying..."
+                } else {
+                    log.info "Bundle not found, retrying..."
+                }
+            }
+
+            status = getRemoteBundleStatus(bundleSymbolicName)
+
+            Thread.sleep(retryDelay)
+
+            retryCount++
+        }
+
+        status
+    }
+
+    private String getRemoteBundleStatus(String bundleSymbolicName) throws MojoExecutionException, MojoFailureException, IOException {
         def status = ""
 
         restClient.get(path: "/system/console/bundles/.json") { response, json ->

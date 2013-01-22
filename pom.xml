@@ -56,6 +56,7 @@
         <compiler.version>1.6</compiler.version>
         <compiler.plugin.version>2.3.2</compiler.plugin.version>
         <groovy.eclipse.compiler.version>2.7.0-01</groovy.eclipse.compiler.version>
+        <groovy.eclipse.batch.version>2.0.4-04</groovy.eclipse.batch.version>
         <surefire.plugin.version>2.13</surefire.plugin.version>
         <site.plugin.version>3.2</site.plugin.version>
         <github.site.plugin.version>0.7</github.site.plugin.version>
@@ -139,6 +140,11 @@
                         <groupId>org.codehaus.groovy</groupId>
                         <artifactId>groovy-eclipse-compiler</artifactId>
                         <version>${groovy.eclipse.compiler.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy-eclipse-batch</artifactId>
+                        <version>${groovy.eclipse.batch.version}</version>
                     </dependency>
                 </dependencies>
             </plugin>
