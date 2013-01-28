@@ -72,7 +72,7 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
     /**
      * Quiet logging when checking bundle status.
      */
-    @Parameter(property = "osgi.bundle.status.verbose", defaultValue = "false")
+    @Parameter(property = "osgi.bundle.status.quiet", defaultValue = "false")
     private boolean quiet;
 
     @Override
