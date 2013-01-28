@@ -27,6 +27,8 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
 
     final def restClient
 
+    final def quiet
+
     def json
 
     FelixBundleStatusChecker(mojo) {
@@ -37,6 +39,7 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
         retryDelay = mojo.retryDelay
         retryLimit = mojo.retryLimit
         requiredStatus = mojo.requiredStatus
+        quiet = mojo.quiet
         log = mojo.log
 
         restClient = new RESTClient("http://$host:$port")
@@ -57,6 +60,7 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
         retryDelay = mojo.retryDelay
         retryLimit = mojo.retryLimit
         requiredStatus = mojo.requiredStatus
+        quiet = mojo.quiet
         log = mojo.log
 
         this.restClient = restClient
@@ -64,13 +68,17 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
 
     @Override
     void checkStatus(String bundleSymbolicName) throws MojoExecutionException, MojoFailureException {
-        log.info "Checking OSGi bundle status: $bundleSymbolicName"
+        if (!quiet) {
+            log.info "Checking OSGi bundle status: $bundleSymbolicName"
+        }
 
         try {
             def status = getStatus(bundleSymbolicName)
 
             if (requiredStatus == status) {
-                log.info "$bundleSymbolicName is $status"
+                if (!quiet) {
+                    log.info "$bundleSymbolicName is $status"
+                }
             } else {
                 def msg
 
@@ -93,10 +101,12 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
         def retryCount = 0
 
         while (requiredStatus != status && retryCount < retryLimit) {
-            if (status) {
-                log.info "Bundle is $status, retrying..."
-            } else {
-                log.info "Bundle not found, retrying..."
+            if (!quiet) {
+                if (status) {
+                    log.info "Bundle is $status, retrying..."
+                } else {
+                    log.info "Bundle not found, retrying..."
+                }
             }
 
             status = getRemoteBundleStatus(bundleSymbolicName, true)

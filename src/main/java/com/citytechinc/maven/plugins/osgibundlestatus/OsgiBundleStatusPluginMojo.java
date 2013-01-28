@@ -31,7 +31,7 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
      * OSGi container port number.
      */
     @Parameter(defaultValue = "4502")
-    private String port;
+    private Integer port;
 
     /**
      * OSGi container user name.
@@ -69,6 +69,12 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
     @Parameter(property = "osgi.bundle.status.skip", defaultValue = "false")
     private boolean skip;
 
+    /**
+     * Quiet logging when checking bundle status.
+     */
+    @Parameter(property = "osgi.bundle.status.verbose", defaultValue = "false")
+    private boolean quiet;
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         if (skip) {
@@ -86,7 +92,7 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
         return host;
     }
 
-    public String getPort() {
+    public Integer getPort() {
         return port;
     }
 
@@ -108,5 +114,9 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
 
     public String getRequiredStatus() {
         return requiredStatus;
+    }
+
+    public boolean isQuiet() {
+        return quiet;
     }
 }
