@@ -1,6 +1,6 @@
 ${project.name}
 
-    The ${project.name} is used during the <<<verify>>> phase of the build
+    The ${project.name} is used during the <<<install>>> phase of the build
     lifecycle to check the status of one or more bundles in an OSGi
     container, such as {{{http://felix.apache.org/}Apache Felix}}.  The plugin
     expects the OSGi container to be running at build time in order to connect
