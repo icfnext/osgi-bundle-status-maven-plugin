@@ -12,7 +12,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 /**
  * Check the status of bundle(s) in an OSGi container.
  */
-@Mojo(name = "status", defaultPhase = LifecyclePhase.VERIFY)
+@Mojo(name = "status", defaultPhase = LifecyclePhase.INSTALL)
 public class OsgiBundleStatusPluginMojo extends AbstractMojo {
 
     /**
@@ -78,7 +78,7 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         if (skip) {
-            getLog().info("Skipping execute per configuration.");
+            getLog().info("Skipping execution per configuration.");
         } else {
             final BundleStatusChecker checker = new FelixBundleStatusChecker(this);
 

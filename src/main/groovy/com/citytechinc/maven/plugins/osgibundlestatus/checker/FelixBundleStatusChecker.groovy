@@ -9,75 +9,44 @@ import org.apache.maven.plugin.MojoFailureException
 
 class FelixBundleStatusChecker implements BundleStatusChecker {
 
-    final def host
+    def mojo
 
-    final def port
-
-    final def username
-
-    final def password
-
-    final def retryDelay
-
-    final def retryLimit
-
-    final def requiredStatus
-
-    final def log
-
-    final def restClient
-
-    final def quiet
+    def restClient
 
     def json
 
     FelixBundleStatusChecker(mojo) {
-        host = mojo.host
-        port = mojo.port
-        username = mojo.username
-        password = mojo.password
-        retryDelay = mojo.retryDelay
-        retryLimit = mojo.retryLimit
-        requiredStatus = mojo.requiredStatus
-        quiet = mojo.quiet
-        log = mojo.log
+        this.mojo = mojo
 
-        restClient = new RESTClient("http://$host:$port")
+        restClient = new RESTClient("http://${mojo.host}:${mojo.port}")
 
         restClient.client.addRequestInterceptor(new HttpRequestInterceptor() {
             @Override
             void process(HttpRequest httpRequest, HttpContext httpContext) {
-                httpRequest.addHeader("Authorization", "Basic " + "$username:$password".toString().bytes.encodeBase64().toString())
+                httpRequest.addHeader("Authorization", "Basic " + "${mojo.username}:${mojo.password}".toString().bytes.encodeBase64().toString())
             }
         })
     }
 
     FelixBundleStatusChecker(mojo, restClient) {
-        host = mojo.host
-        port = mojo.port
-        username = mojo.username
-        password = mojo.password
-        retryDelay = mojo.retryDelay
-        retryLimit = mojo.retryLimit
-        requiredStatus = mojo.requiredStatus
-        quiet = mojo.quiet
-        log = mojo.log
-
+        this.mojo = mojo
         this.restClient = restClient
     }
 
     @Override
     void checkStatus(String bundleSymbolicName) throws MojoExecutionException, MojoFailureException {
-        if (!quiet) {
-            log.info "Checking OSGi bundle status: $bundleSymbolicName"
+        if (!mojo.quiet) {
+            mojo.log.info "Checking OSGi bundle status: $bundleSymbolicName"
         }
+
+        def requiredStatus = mojo.requiredStatus
 
         try {
             def status = getStatus(bundleSymbolicName)
 
             if (requiredStatus == status) {
-                if (!quiet) {
-                    log.info "$bundleSymbolicName is $status"
+                if (!mojo.quiet) {
+                    mojo.log.info "$bundleSymbolicName is $status"
                 }
             } else {
                 def msg
@@ -95,17 +64,21 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
         }
     }
 
-    def getStatus(String bundleSymbolicName) {
+    def getStatus(bundleSymbolicName) {
         def status = getRemoteBundleStatus(bundleSymbolicName, false)
 
         def retryCount = 0
 
+        def requiredStatus = mojo.requiredStatus
+        def retryLimit = mojo.retryLimit
+        def retryDelay = mojo.retryDelay
+
         while (requiredStatus != status && retryCount < retryLimit) {
-            if (!quiet) {
+            if (!mojo.quiet) {
                 if (status) {
-                    log.info "Bundle is $status, retrying..."
+                    mojo.log.info "Bundle is $status, retrying..."
                 } else {
-                    log.info "Bundle not found, retrying..."
+                    mojo.log.info "Bundle not found, retrying..."
                 }
             }
 
@@ -119,7 +92,7 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
         status
     }
 
-    def getRemoteBundleStatus(String bundleSymbolicName, boolean force) {
+    def getRemoteBundleStatus(bundleSymbolicName, force) {
         def status = null
 
         if (!json || force) {

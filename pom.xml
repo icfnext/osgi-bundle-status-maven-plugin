@@ -41,29 +41,6 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-        <!-- dependency versions -->
-        <maven.plugin.api.version>3.0.4</maven.plugin.api.version>
-        <maven.plugin.annotations.version>3.1</maven.plugin.annotations.version>
-        <groovy.version>2.0.5</groovy.version>
-        <groovy.http-builder.version>0.5.2</groovy.http-builder.version>
-        <httpcore.version>4.0.1</httpcore.version>
-        <spock.version>0.7-groovy-2.0</spock.version>
-        <cglib.version>2.2</cglib.version>
-        <objenesis.version>1.2</objenesis.version>
-
-        <!-- plugin dependency versions -->
-        <compiler.version>1.6</compiler.version>
-        <compiler.plugin.version>2.3.2</compiler.plugin.version>
-        <groovy.eclipse.compiler.version>2.7.0-01</groovy.eclipse.compiler.version>
-        <groovy.eclipse.batch.version>2.0.4-04</groovy.eclipse.batch.version>
-        <surefire.plugin.version>2.13</surefire.plugin.version>
-        <site.plugin.version>3.2</site.plugin.version>
-        <github.site.plugin.version>0.7</github.site.plugin.version>
-        <project.info.plugin.version>2.6</project.info.plugin.version>
-        <surefire.report.plugin.version>2.13</surefire.report.plugin.version>
-        <plugin.plugin.version>3.2</plugin.plugin.version>
-        <gpg.plugin.version>1.4</gpg.plugin.version>
     </properties>
 
     <profiles>
@@ -79,7 +56,7 @@
                     <plugin>
                         <groupId>com.github.github</groupId>
                         <artifactId>site-maven-plugin</artifactId>
-                        <version>${github.site.plugin.version}</version>
+                        <version>0.7</version>
                         <configuration>
                             <message>site for ${project.version}</message>
                             <server>github</server>
@@ -108,7 +85,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>${gpg.plugin.version}</version>
+                        <version>1.4</version>
                         <executions>
                             <execution>
                                 <phase>verify</phase>
@@ -127,29 +104,29 @@
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>${compiler.plugin.version}</version>
+                <version>2.3.2</version>
                 <configuration>
                     <compilerId>groovy-eclipse-compiler</compilerId>
-                    <source>${compiler.version}</source>
-                    <target>${compiler.version}</target>
+                    <source>1.6</source>
+                    <target>1.6</target>
                     <encoding>utf-8</encoding>
                 </configuration>
                 <dependencies>
                     <dependency>
                         <groupId>org.codehaus.groovy</groupId>
                         <artifactId>groovy-eclipse-compiler</artifactId>
-                        <version>${groovy.eclipse.compiler.version}</version>
+                        <version>2.7.0-01</version>
                     </dependency>
                     <dependency>
                         <groupId>org.codehaus.groovy</groupId>
                         <artifactId>groovy-eclipse-batch</artifactId>
-                        <version>${groovy.eclipse.batch.version}</version>
+                        <version>2.0.4-04</version>
                     </dependency>
                 </dependencies>
             </plugin>
             <plugin>
                 <artifactId>maven-plugin-plugin</artifactId>
-                <version>${plugin.plugin.version}</version>
+                <version>3.2</version>
                 <configuration>
                     <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
                 </configuration>
@@ -170,7 +147,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>${surefire.plugin.version}</version>
+                <version>2.13</version>
                 <configuration>
                     <includes>
                         <include>**/*Spec*</include>
@@ -179,16 +156,16 @@
             </plugin>
             <plugin>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>${site.plugin.version}</version>
+                <version>3.2</version>
                 <configuration>
                     <reportPlugins>
                         <plugin>
                             <artifactId>maven-plugin-plugin</artifactId>
-                            <version>${plugin.plugin.version}</version>
+                            <version>3.2</version>
                         </plugin>
                         <plugin>
                             <artifactId>maven-project-info-reports-plugin</artifactId>
-                            <version>${project.info.plugin.version}</version>
+                            <version>2.6</version>
                             <configuration>
                                 <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
                             </configuration>
@@ -208,7 +185,7 @@
                         </plugin>
                         <plugin>
                             <artifactId>maven-surefire-report-plugin</artifactId>
-                            <version>${surefire.report.plugin.version}</version>
+                            <version>2.13</version>
                         </plugin>
                     </reportPlugins>
                 </configuration>
@@ -221,27 +198,27 @@
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-plugin-api</artifactId>
-            <version>${maven.plugin.api.version}</version>
+            <version>3.0.4</version>
         </dependency>
         <dependency>
             <groupId>org.apache.maven.plugin-tools</groupId>
             <artifactId>maven-plugin-annotations</artifactId>
-            <version>${maven.plugin.annotations.version}</version>
+            <version>3.1</version>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpcore</artifactId>
-            <version>${httpcore.version}</version>
+            <version>4.0.1</version>
         </dependency>
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
-            <version>${groovy.version}</version>
+            <version>2.1.0</version>
         </dependency>
         <dependency>
             <groupId>org.codehaus.groovy.modules.http-builder</groupId>
             <artifactId>http-builder</artifactId>
-            <version>${groovy.http-builder.version}</version>
+            <version>0.5.2</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.codehaus.groovy</groupId>
@@ -254,19 +231,19 @@
         <dependency>
             <groupId>org.spockframework</groupId>
             <artifactId>spock-core</artifactId>
-            <version>${spock.version}</version>
+            <version>0.7-groovy-2.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.objenesis</groupId>
             <artifactId>objenesis</artifactId>
-            <version>${objenesis.version}</version>
+            <version>1.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>cglib</groupId>
             <artifactId>cglib-nodep</artifactId>
-            <version>${cglib.version}</version>
+            <version>2.2.2</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
