@@ -12,7 +12,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 /**
  * Check the status of bundle(s) in an OSGi container.
  */
-@Mojo(name = "status", defaultPhase = LifecyclePhase.VERIFY)
+@Mojo(name = "status", defaultPhase = LifecyclePhase.INSTALL)
 public class OsgiBundleStatusPluginMojo extends AbstractMojo {
 
     /**
@@ -31,7 +31,7 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
      * OSGi container port number.
      */
     @Parameter(defaultValue = "4502")
-    private String port;
+    private Integer port;
 
     /**
      * OSGi container user name.
@@ -69,10 +69,16 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
     @Parameter(property = "osgi.bundle.status.skip", defaultValue = "false")
     private boolean skip;
 
+    /**
+     * Quiet logging when checking bundle status.
+     */
+    @Parameter(property = "osgi.bundle.status.quiet", defaultValue = "false")
+    private boolean quiet;
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         if (skip) {
-            getLog().info("Skipping execute per configuration.");
+            getLog().info("Skipping execution per configuration.");
         } else {
             final BundleStatusChecker checker = new FelixBundleStatusChecker(this);
 
@@ -86,7 +92,7 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
         return host;
     }
 
-    public String getPort() {
+    public Integer getPort() {
         return port;
     }
 
@@ -108,5 +114,9 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
 
     public String getRequiredStatus() {
         return requiredStatus;
+    }
+
+    public boolean isQuiet() {
+        return quiet;
     }
 }

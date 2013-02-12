@@ -179,7 +179,7 @@ class FelixBundleStatusCheckerSpec extends Specification {
         def mojo = Mock(OsgiBundleStatusPluginMojo)
 
         mojo.host >> 'localhost'
-        mojo.port >> '4502'
+        mojo.port >> 4502
         mojo.username >> 'admin'
         mojo.password >> 'admin'
         mojo.requiredStatus >> requiredStatus
