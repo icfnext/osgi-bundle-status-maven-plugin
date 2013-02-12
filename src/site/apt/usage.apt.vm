@@ -39,7 +39,7 @@ Usage
 
 * Execution
 
-    By default, the plugin is executed in the <<<verify>>> phase of the build
+    By default, the plugin is executed in the <<<install>>> phase of the build
     lifecycle to ensure that a bundle has been successfully installed to an
     OSGi container.
 
