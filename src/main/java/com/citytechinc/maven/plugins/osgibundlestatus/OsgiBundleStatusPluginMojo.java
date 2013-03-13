@@ -15,6 +15,12 @@ import org.apache.maven.plugins.annotations.Parameter;
 @Mojo(name = "status", defaultPhase = LifecyclePhase.INSTALL)
 public class OsgiBundleStatusPluginMojo extends AbstractMojo {
 
+	/**
+	 * Root path to the OSGi Management Console.
+	 */
+	@Parameter(defaultValue = "/system/console")
+	private String path;
+
     /**
      * Symbolic names of OSGi bundles to check.
      */
@@ -118,5 +124,9 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
 
     public boolean isQuiet() {
         return quiet;
+    }
+
+    public String getPath() {
+        return path;
     }
 }
