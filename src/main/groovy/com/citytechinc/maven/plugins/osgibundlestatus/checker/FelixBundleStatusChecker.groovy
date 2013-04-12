@@ -111,7 +111,7 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
     def getBundleStatusJson() {
         def bundleStatusJson = null
 
-        restClient.get(path: "/system/console/bundles/.json") { response, json ->
+        restClient.get(path: "${mojo.path}/bundles/.json") { response, json ->
             if (json) {
                 def data = json.data
 
