@@ -8,7 +8,7 @@
     <artifactId>osgi-bundle-status-maven-plugin</artifactId>
     <name>OSGi Bundle Status Maven Plugin</name>
     <description>Remote bundle status checker for OSGi containers.</description>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <organization>
@@ -132,7 +132,7 @@
                     <dependency>
                         <groupId>org.codehaus.groovy</groupId>
                         <artifactId>groovy-all</artifactId>
-                        <version>2.1.1</version>
+                        <version>2.1.2</version>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -159,7 +159,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.13</version>
+                <version>2.14.1</version>
                 <configuration>
                     <includes>
                         <include>**/*Spec*</include>
@@ -197,7 +197,7 @@
                         </plugin>
                         <plugin>
                             <artifactId>maven-surefire-report-plugin</artifactId>
-                            <version>2.13</version>
+                            <version>2.14.1</version>
                         </plugin>
                     </reportPlugins>
                 </configuration>
