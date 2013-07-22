@@ -6,6 +6,8 @@
 
 Remote bundle status checker for OSGi containers.
 
+See [Maven site](http://citytechinc.github.io/osgi-bundle-status-maven-plugin) for full documentation.
+
 ## Versioning
 
 Follows [Semantic Versioning](http://semver.org/) guidelines.
