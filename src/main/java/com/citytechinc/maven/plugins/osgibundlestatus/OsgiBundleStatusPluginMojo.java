@@ -15,11 +15,11 @@ import org.apache.maven.plugins.annotations.Parameter;
 @Mojo(name = "status", defaultPhase = LifecyclePhase.INSTALL)
 public class OsgiBundleStatusPluginMojo extends AbstractMojo {
 
-	/**
-	 * Root path to the OSGi Management Console.
-	 */
-	@Parameter(defaultValue = "/system/console")
-	private String path;
+    /**
+     * Root path to the OSGi Management Console.
+     */
+    @Parameter(defaultValue = "/system/console")
+    private String path;
 
     /**
      * Symbolic names of OSGi bundles to check.
@@ -70,6 +70,12 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
     private String requiredStatus;
 
     /**
+     * Use 'https' scheme for status check.
+     */
+    @Parameter(property = "osgi.bundle.status.secure", defaultValue = "false")
+    private boolean secure;
+
+    /**
      * Skip execution of the plugin.
      */
     @Parameter(property = "osgi.bundle.status.skip", defaultValue = "false")
@@ -98,16 +104,20 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
         return host;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
     public Integer getPort() {
         return port;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
+    public String getRequiredStatus() {
+        return requiredStatus;
     }
 
     public Integer getRetryDelay() {
@@ -118,15 +128,15 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
         return retryLimit;
     }
 
-    public String getRequiredStatus() {
-        return requiredStatus;
+    public String getUsername() {
+        return username;
     }
 
     public boolean isQuiet() {
         return quiet;
     }
 
-    public String getPath() {
-        return path;
+    public boolean isSecure() {
+        return secure;
     }
 }
