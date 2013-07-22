@@ -1,0 +1,53 @@
+## Advanced
+
+More advanced configurations can be used to change connection parameters,
+specify additional bundle names to be checked, or require a bundle status
+other than 'Active'.  If multiple bundle names are specified, the build
+will fail if any of the bundles do not match the required status.
+
+    <project>
+        [...]
+        <build>
+            <plugins>
+                <plugin>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>${project.artifactId}</artifactId>
+                    <version>${project.version}</version>
+                    <executions>
+                        <execution>
+                            <id>check-active-bundles</id>
+                            <goals>
+                                <goal>status</goal>
+                            </goals>
+                            <configuration>
+                                <bundleNames>
+                                    <bundleName>groovy-all</bundleName>
+                                    <bundleName>com.google.guava</bundleName>
+                                </bundleNames>
+                                <host>1.1.1.1</host>
+                                <port>8080</port>
+                                <username>administrator</username>
+                                <password>adm1ni$tr8t0r</password>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>check-fragment-bundles</id>
+                            <goals>
+                                <goal>status</goal>
+                            </goals>
+                            <configuration>
+                                <bundleNames>
+                                    <bundleName>some-fragment-bundle</bundleName>
+                                    <bundleName>another-fragment-bundle</bundleName>
+                                </bundleNames>
+                                <requiredStatus>Fragment</requiredStatus>
+                                <retryDelay>500</retryDelay>
+                                <retryLimit>10</retryLimit>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </build>
+        [...]
+    </project>

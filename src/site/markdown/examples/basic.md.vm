@@ -1,0 +1,31 @@
+## Basic
+
+The basic configuration requires only a single bundle name.  The plugin
+will connect to the OSGi container using the default parameters and verify
+that the specified bundle is 'Active'.
+
+    <project>
+        [...]
+        <build>
+            <plugins>
+                <plugin>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>${project.artifactId}</artifactId>
+                    <version>${project.version}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>status</goal>
+                            </goals>
+                            <configuration>
+                                <bundleNames>
+                                    <bundleName>groovy-all</bundleName>
+                                </bundleNames>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </build>
+        [...]
+    </project>
