@@ -1,5 +1,6 @@
 package com.citytechinc.maven.plugins.osgibundlestatus.checker
 
+import com.citytechinc.maven.plugins.osgibundlestatus.OsgiBundleStatusPluginMojo
 import groovyx.net.http.RESTClient
 import org.apache.http.HttpRequest
 import org.apache.http.HttpRequestInterceptor
@@ -15,10 +16,12 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
 
     def json
 
-    FelixBundleStatusChecker(mojo) {
+    FelixBundleStatusChecker(OsgiBundleStatusPluginMojo mojo) {
         this.mojo = mojo
 
-        restClient = new RESTClient("http://${mojo.host}:${mojo.port}")
+        def scheme = mojo.secure ? "https" : "http"
+
+        restClient = new RESTClient("$scheme://${mojo.host}:${mojo.port}")
 
         restClient.client.addRequestInterceptor(new HttpRequestInterceptor() {
             @Override
