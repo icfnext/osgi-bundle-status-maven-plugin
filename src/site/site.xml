@@ -2,30 +2,42 @@
 <project xmlns="http://maven.apache.org/DECORATION/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0 http://maven.apache.org/xsd/decoration-1.0.0.xsd">
 
-    <bannerLeft>
-        <name>${project.name}</name>
-        <src>http://maven.apache.org/images/apache-maven-project.png</src>
-        <href>http://maven.apache.org/</href>
-    </bannerLeft>
-    <bannerRight>
-        <src>http://maven.apache.org/images/maventxt_logo_200.gif</src>
-    </bannerRight>
-
     <skin>
-        <groupId>org.apache.maven.skins</groupId>
-        <artifactId>maven-fluido-skin</artifactId>
-        <version>1.3.0</version>
+        <groupId>lt.velykis.maven.skins</groupId>
+        <artifactId>reflow-maven-skin</artifactId>
+        <version>1.0.0</version>
     </skin>
 
+    <bannerLeft>
+        <name>${project.name}</name>
+        <href>http://citytechinc.github.io/osgi-bundle-status-maven-plugin</href>
+    </bannerLeft>
+
     <custom>
-        <fluidoSkin>
-            <topBarEnabled>true</topBarEnabled>
-            <sideBarEnabled>false</sideBarEnabled>
-            <gitHub>
-                <projectId>Citytechinc/osgi-bundle-status-maven-plugin</projectId>
-                <ribbonOrientation>right</ribbonOrientation>
-            </gitHub>
-        </fluidoSkin>
+        <reflowSkin>
+            <skinAttribution>false</skinAttribution>
+            <protocolRelativeURLs>false</protocolRelativeURLs>
+            <smoothScroll>true</smoothScroll>
+            <titleTemplate>%2$s | %1$s</titleTemplate>
+            <breadcrumbs>false</breadcrumbs>
+            <markPageHeader>false</markPageHeader>
+            <toc>false</toc>
+            <theme>default</theme>
+            <highlightJs>true</highlightJs>
+            <highlightJsTheme>github</highlightJsTheme>
+            <topNav>Overview|Examples|reports</topNav>
+            <brand>
+                <name>${project.name}</name>
+                <href>./index.html</href>
+            </brand>
+            <slogan>Remote bundle status checker for OSGi containers.</slogan>
+            <body />
+            <bottomNav>
+                <column>Overview</column>
+                <column>Examples</column>
+                <column>reports</column>
+            </bottomNav>
+        </reflowSkin>
     </custom>
 
     <body>
@@ -40,5 +52,8 @@
             <item name="Skipping Verification" href="examples/skip.html"/>
         </menu>
         <menu ref="reports"/>
+        <links>
+            <item name="GitHub Project" href="https://github.com/Citytechinc/osgi-bundle-status-maven-plugin" />
+        </links>
     </body>
 </project>
