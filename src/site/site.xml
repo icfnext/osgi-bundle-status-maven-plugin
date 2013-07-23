@@ -13,40 +13,26 @@
         <href>http://citytechinc.github.io/osgi-bundle-status-maven-plugin</href>
     </bannerLeft>
 
-    <!--
-    <custom>
-        <fluidoSkin>
-            <topBarEnabled>true</topBarEnabled>
-            <sideBarEnabled>false</sideBarEnabled>
-            <gitHub>
-                <projectId>Citytechinc/osgi-bundle-status-maven-plugin</projectId>
-                <ribbonOrientation>right</ribbonOrientation>
-            </gitHub>
-        </fluidoSkin>
-    </custom>
-    -->
-
     <custom>
         <reflowSkin>
             <skinAttribution>false</skinAttribution>
             <protocolRelativeURLs>false</protocolRelativeURLs>
             <smoothScroll>true</smoothScroll>
             <titleTemplate>%2$s | %1$s</titleTemplate>
-            <!--<breadcrumbs>false</breadcrumbs>-->
+            <breadcrumbs>false</breadcrumbs>
             <markPageHeader>false</markPageHeader>
             <toc>false</toc>
             <theme>default</theme>
             <highlightJs>true</highlightJs>
             <highlightJsTheme>github</highlightJsTheme>
-            <topNav>Overview|Examples|Reports</topNav>
+            <topNav>Overview|Examples|reports</topNav>
             <brand>
                 <name>${project.name}</name>
                 <href>./index.html</href>
             </brand>
             <slogan>Remote bundle status checker for OSGi containers.</slogan>
-            <!--<toc>sidebar</toc>-->
             <body />
-            <bottomNav maxSpan="9">
+            <bottomNav>
                 <column>Overview</column>
                 <column>Examples</column>
                 <column>reports</column>
@@ -55,16 +41,10 @@
     </custom>
 
     <body>
-        <!--
-        <links>
-            <item name="GitHub project" href="https://github.com/Citytechinc/osgi-bundle-status-maven-plugin" />
-        </links>
-        -->
         <menu name="Overview">
             <item name="Introduction" href="index.html"/>
             <item name="Goals" href="plugin-info.html"/>
             <item name="Usage" href="usage.html"/>
-            <item name="GitHub project" href="https://github.com/Citytechinc/osgi-bundle-status-maven-plugin" />
         </menu>
         <menu name="Examples">
             <item name="Basic" href="examples/basic.html"/>
@@ -72,5 +52,8 @@
             <item name="Skipping Verification" href="examples/skip.html"/>
         </menu>
         <menu ref="reports"/>
+        <links>
+            <item name="GitHub Project" href="https://github.com/Citytechinc/osgi-bundle-status-maven-plugin" />
+        </links>
     </body>
 </project>

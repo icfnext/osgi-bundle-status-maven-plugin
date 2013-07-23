@@ -202,7 +202,7 @@
                                 <reportSet>
                                     <reports>
                                         <report>dependencies</report>
-                                        <report>index</report>
+                                        <!--<report>index</report>-->
                                         <report>license</report>
                                         <report>plugins</report>
                                         <report>project-team</report>

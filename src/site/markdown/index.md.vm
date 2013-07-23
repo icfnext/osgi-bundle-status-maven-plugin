@@ -1,5 +1,3 @@
-#${project.name}
-
 The ${project.name} is used during the `install` phase of the build
 lifecycle to check the status of one or more bundles in an OSGi
 container, such as [Apache Felix](http://felix.apache.org/).  The plugin
@@ -14,14 +12,11 @@ Currently, Apache Felix is the only supported OSGi container.
 
 The plugin has only one goal:
 
-* [osgi-bundle-status:status](./status-mojo.html) checks the status of
-bundle(s) in a remote OSGi container.
+* [osgi-bundle-status:status](./status-mojo.html) checks the status of bundle(s) in a remote OSGi container.
 
 ## Usage
 
-Instructions on how to use the plugin can be found on the
-[usage](./usage.html).  More specific use cases are detailed in the
-examples provided below.
+Instructions on how to use the plugin can be found on the [usage](./usage.html) page.  More specific use cases are detailed in the examples provided below.
 
 ## Examples
 
