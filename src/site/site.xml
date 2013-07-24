@@ -10,7 +10,7 @@
 
     <bannerLeft>
         <name>${project.name}</name>
-        <href>http://citytechinc.github.io/osgi-bundle-status-maven-plugin</href>
+        <href>http://code.citytechinc.com/osgi-bundle-status-maven-plugin</href>
     </bannerLeft>
 
     <custom>
