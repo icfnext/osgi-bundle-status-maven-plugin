@@ -8,10 +8,22 @@
         <version>1.0.0</version>
     </skin>
 
+    <!--
     <bannerLeft>
         <name>${project.name}</name>
         <href>http://code.citytechinc.com/osgi-bundle-status-maven-plugin</href>
     </bannerLeft>
+    -->
+
+    <bannerLeft>
+        <src>img/logo.png</src>
+    </bannerLeft>
+    <bannerRight>
+        <name>${project.name}</name>
+        <href>./index.html</href>
+    </bannerRight>
+
+    <googleAnalyticsAccountId>UA-928005-4</googleAnalyticsAccountId>
 
     <custom>
         <reflowSkin>
@@ -22,7 +34,7 @@
             <breadcrumbs>false</breadcrumbs>
             <markPageHeader>false</markPageHeader>
             <toc>false</toc>
-            <theme>default</theme>
+            <theme>site</theme>
             <highlightJs>true</highlightJs>
             <highlightJsTheme>github</highlightJsTheme>
             <topNav>Overview|Examples|reports</topNav>
