@@ -72,7 +72,7 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
     /**
      * Use 'https' scheme for status check.
      */
-    @Parameter(property = "osgi.bundle.status.secure", defaultValue = "false")
+    @Parameter(defaultValue = "false")
     private boolean secure;
 
     /**
