@@ -8,15 +8,9 @@
         <version>1.0.0</version>
     </skin>
 
-    <!--
-    <bannerLeft>
-        <name>${project.name}</name>
-        <href>http://code.citytechinc.com/osgi-bundle-status-maven-plugin</href>
-    </bannerLeft>
-    -->
-
     <bannerLeft>
         <src>img/logo.png</src>
+        <href>http://www.citytechinc.com</href>
     </bannerLeft>
     <bannerRight>
         <name>${project.name}</name>
@@ -42,7 +36,7 @@
                 <name>${project.name}</name>
                 <href>./index.html</href>
             </brand>
-            <slogan>Remote bundle status checker for OSGi containers.</slogan>
+            <slogan position="bannerRight">Remote bundle status checker for OSGi containers.</slogan>
             <body />
             <bottomNav>
                 <column>Overview</column>
