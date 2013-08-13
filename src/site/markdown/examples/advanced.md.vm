@@ -1,4 +1,6 @@
-## Advanced
+#set($symbol_pound = '#')
+
+$symbol_pound$symbol_pound Advanced
 
 More advanced configurations can be used to change connection parameters,
 specify additional bundle names to be checked, or require a bundle status

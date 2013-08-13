@@ -5,12 +5,12 @@
     <skin>
         <groupId>com.citytechinc.maven</groupId>
         <artifactId>citytech-maven-skin</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1.0.0</version>
     </skin>
 
     <bannerRight>
         <name>${project.name}</name>
-        <href>./index.html</href>
+        <href>http://code.citytechinc.com/osgi-bundle-status-maven-plugin</href>
     </bannerRight>
 
     <googleAnalyticsAccountId>UA-928005-4</googleAnalyticsAccountId>
@@ -29,7 +29,7 @@
             <topNav>Overview|Examples|reports</topNav>
             <brand>
                 <name>${project.name}</name>
-                <href>./index.html</href>
+                <href>http://code.citytechinc.com/osgi-bundle-status-maven-plugin</href>
             </brand>
             <slogan position="bannerRight">Remote bundle status checker for OSGi containers.</slogan>
             <body />

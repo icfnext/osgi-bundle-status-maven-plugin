@@ -1,3 +1,5 @@
+#set($symbol_pound = '#')
+
 The ${project.name} is used during the `install` phase of the build
 lifecycle to check the status of one or more bundles in an OSGi
 container, such as [Apache Felix](http://felix.apache.org/).  The plugin
@@ -8,17 +10,17 @@ expected after a successful build.
 
 Currently, Apache Felix is the only supported OSGi container.
 
-## Goals
+$symbol_pound$symbol_pound Goals
 
 The plugin has only one goal:
 
 * [osgi-bundle-status:status](./status-mojo.html) checks the status of bundle(s) in a remote OSGi container.
 
-## Usage
+$symbol_pound$symbol_pound Usage
 
 Instructions on how to use the plugin can be found on the [usage](./usage.html) page.  More specific use cases are detailed in the examples provided below.
 
-## Examples
+$symbol_pound$symbol_pound Examples
 
 The following examples demonstrate how to use the plugin in both basic and advanced use cases:
 
