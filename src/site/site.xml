@@ -51,9 +51,9 @@
             <item name="Usage" href="usage.html"/>
         </menu>
         <menu name="Examples">
-            <item name="Basic" href="examples/basic.html"/>
-            <item name="Advanced" href="examples/advanced.html"/>
-            <item name="Skipping Verification" href="examples/skip.html"/>
+            <item name="Basic" href="basic.html"/>
+            <item name="Advanced" href="advanced.html"/>
+            <item name="Skipping Verification" href="skip.html"/>
         </menu>
         <menu ref="reports"/>
     </body>

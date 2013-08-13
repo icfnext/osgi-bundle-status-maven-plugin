@@ -1,5 +1,7 @@
 #set($symbol_pound = '#')
 
+$symbol_pound$symbol_pound Overview
+
 The ${project.name} is used during the `install` phase of the build
 lifecycle to check the status of one or more bundles in an OSGi
 container, such as [Apache Felix](http://felix.apache.org/).  The plugin
@@ -24,5 +26,5 @@ $symbol_pound$symbol_pound Examples
 
 The following examples demonstrate how to use the plugin in both basic and advanced use cases:
 
-* [Basic](./examples/basic.html)
-* [Advanced](./examples/advanced.html)
+* [Basic](./basic.html)
+* [Advanced](./advanced.html)
