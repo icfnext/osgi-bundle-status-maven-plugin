@@ -1,4 +1,6 @@
-## Basic
+#set($symbol_pound = '#')
+
+$symbol_pound$symbol_pound Basic
 
 The basic configuration requires only a single bundle name.  The plugin
 will connect to the OSGi container using the default parameters and verify

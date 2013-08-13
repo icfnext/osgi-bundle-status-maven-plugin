@@ -3,18 +3,14 @@
          xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0 http://maven.apache.org/xsd/decoration-1.0.0.xsd">
 
     <skin>
-        <groupId>lt.velykis.maven.skins</groupId>
-        <artifactId>reflow-maven-skin</artifactId>
+        <groupId>com.citytechinc.maven</groupId>
+        <artifactId>citytech-maven-skin</artifactId>
         <version>1.0.0</version>
     </skin>
 
-    <bannerLeft>
-        <src>img/logo.png</src>
-        <href>http://www.citytechinc.com</href>
-    </bannerLeft>
     <bannerRight>
         <name>${project.name}</name>
-        <href>./index.html</href>
+        <href>http://code.citytechinc.com/osgi-bundle-status-maven-plugin</href>
     </bannerRight>
 
     <googleAnalyticsAccountId>UA-928005-4</googleAnalyticsAccountId>
@@ -28,13 +24,12 @@
             <breadcrumbs>false</breadcrumbs>
             <markPageHeader>false</markPageHeader>
             <toc>false</toc>
-            <theme>site</theme>
             <highlightJs>true</highlightJs>
             <highlightJsTheme>github</highlightJsTheme>
             <topNav>Overview|Examples|reports</topNav>
             <brand>
                 <name>${project.name}</name>
-                <href>./index.html</href>
+                <href>http://code.citytechinc.com/osgi-bundle-status-maven-plugin</href>
             </brand>
             <slogan position="bannerRight">Remote bundle status checker for OSGi containers.</slogan>
             <body />
@@ -47,6 +42,9 @@
     </custom>
 
     <body>
+        <links>
+            <item name="GitHub" href="https://github.com/Citytechinc/osgi-bundle-status-maven-plugin" />
+        </links>
         <menu name="Overview">
             <item name="Introduction" href="index.html"/>
             <item name="Goals" href="plugin-info.html"/>
@@ -58,8 +56,5 @@
             <item name="Skipping Verification" href="examples/skip.html"/>
         </menu>
         <menu ref="reports"/>
-        <links>
-            <item name="GitHub Project" href="https://github.com/Citytechinc/osgi-bundle-status-maven-plugin" />
-        </links>
     </body>
 </project>

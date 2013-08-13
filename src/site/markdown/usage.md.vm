@@ -1,11 +1,13 @@
-## Usage
+#set($symbol_pound = '#')
+
+$symbol_pound$symbol_pound Usage
 
 By default, the specified OSGi bundles are checked for status "Active", but
 any bundle state can be specified.  If multiple bundle names are provided,
 the plugin execution will succeed only if all named bundles match the
 expected status.
 
-## Configuration
+$symbol_pound$symbol_pound Configuration
 
 Define the plugin in your project's `pom.xml` as follows:
 
@@ -35,7 +37,7 @@ Define the plugin in your project's `pom.xml` as follows:
         [...]
     </project>
 
-## Execution
+$symbol_pound$symbol_pound Execution
 
 By default, the plugin is executed in the `install` phase of the build
 lifecycle to ensure that a bundle has been successfully installed to an

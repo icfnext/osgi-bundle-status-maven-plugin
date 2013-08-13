@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.citytechinc.maven.plugins</groupId>
     <artifactId>osgi-bundle-status-maven-plugin</artifactId>
     <name>OSGi Bundle Status Maven Plugin</name>
     <description>Remote bundle status checker for OSGi containers.</description>
-    <version>1.2.0</version>
+    <version>1.2.1</version>
     <packaging>maven-plugin</packaging>
 
     <organization>
@@ -211,6 +210,21 @@
                             <version>2.15</version>
                         </plugin>
                     </reportPlugins>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.atlassian.maven.plugins</groupId>
+                <artifactId>maven-jgitflow-plugin</artifactId>
+                <version>1.0-alpha14</version>
+                <configuration>
+                    <enableFeatureVersions>false</enableFeatureVersions>
+                    <noFeatureBuild>true</noFeatureBuild>
+                    <noReleaseBuild>true</noReleaseBuild>
+                    <flowInitContext>
+                        <featureBranchPrefix>feature-</featureBranchPrefix>
+                        <releaseBranchPrefix>release-</releaseBranchPrefix>
+                        <hotfixBranchPrefix>hotfix-</hotfixBranchPrefix>
+                    </flowInitContext>
                 </configuration>
             </plugin>
         </plugins>
