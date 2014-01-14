@@ -185,19 +185,21 @@ class FelixBundleStatusCheckerSpec extends Specification {
         setupChecker("Active", 5)
     }
 
-    def setupChecker(requiredStatus, retryLimit) {
-        def mojo = Mock(OsgiBundleStatusPluginMojo)
+    def setupChecker(status, limit) {
+        def mojo = new OsgiBundleStatusPluginMojo()
 
-        mojo.host >> "localhost"
-        mojo.port >> 4502
-        mojo.contextPath >> ""
-        mojo.path >> "/system/console"
-        mojo.username >> "admin"
-        mojo.password >> "admin"
-        mojo.requiredStatus >> requiredStatus
-        mojo.retryDelay >> 1
-        mojo.retryLimit >> retryLimit
-        mojo.log >> Mock(Log)
+        mojo.with {
+            host = "localhost"
+            port = 4502
+            contextPath = ""
+            path = "/system/console"
+            username = "admin"
+            password = "admin"
+            requiredStatus = status
+            retryDelay = 1
+            retryLimit = limit
+            log = Mock(Log)
+        }
 
         new FelixBundleStatusChecker(mojo)
     }

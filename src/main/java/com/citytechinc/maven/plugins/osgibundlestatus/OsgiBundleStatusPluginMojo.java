@@ -15,6 +15,8 @@ import org.apache.maven.plugins.annotations.Parameter;
 @Mojo(name = "status", defaultPhase = LifecyclePhase.INSTALL)
 public class OsgiBundleStatusPluginMojo extends AbstractMojo {
 
+    private static final String PATH_SUFFIX = "/bundles/.json";
+
     /**
      * Root path to the OSGi Management Console.
      */
@@ -114,16 +116,8 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
         return password;
     }
 
-    public String getPath() {
-        return path;
-    }
-
     public Integer getPort() {
         return port;
-    }
-
-    public String getContextPath() {
-        return contextPath;
     }
 
     public String getRequiredStatus() {
@@ -148,5 +142,9 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
 
     public boolean isSecure() {
         return secure;
+    }
+
+    public String getBundlesJsonPath() {
+        return contextPath + path + PATH_SUFFIX;
     }
 }
