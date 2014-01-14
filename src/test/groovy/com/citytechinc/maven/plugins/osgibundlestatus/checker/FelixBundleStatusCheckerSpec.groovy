@@ -1,192 +1,210 @@
 package com.citytechinc.maven.plugins.osgibundlestatus.checker
 
 import com.citytechinc.maven.plugins.osgibundlestatus.OsgiBundleStatusPluginMojo
-import groovyx.net.http.HttpResponseDecorator
-import groovyx.net.http.RESTClient
+import groovy.json.JsonBuilder
 import org.apache.maven.plugin.MojoExecutionException
 import org.apache.maven.plugin.MojoFailureException
 import org.apache.maven.plugin.logging.Log
 import spock.lang.Specification
 
+import static net.jadler.Jadler.closeJadler
+import static net.jadler.Jadler.initJadlerListeningOn
+import static net.jadler.Jadler.onRequest
+import static net.jadler.Jadler.verifyThatRequest
+
 class FelixBundleStatusCheckerSpec extends Specification {
 
-    static def JSON = [data: [[symbolicName: 'foo', state: 'Active'], [symbolicName: 'bar', state: 'Resolved']]]
+    static def JSON = [data: [[symbolicName: "foo", state: "Active"], [symbolicName: "bar", state: "Resolved"]]]
+
+    def setup() {
+        initJadlerListeningOn(4502)
+    }
+
+    def cleanup() {
+        closeJadler()
+    }
 
     def "active bundle"() {
         setup:
-        def restClient = createMockRestClient(1, JSON)
-        def mojo = createMockMojo()
+        setupMockServer(JSON)
 
-        def checker = new FelixBundleStatusChecker(mojo, restClient)
+        def checker = setupChecker()
 
         when:
-        checker.checkStatus('foo')
+        checker.checkStatus("foo")
 
         then:
         notThrown(MojoFailureException)
+        verifyRequests(1)
     }
 
     def "custom bundle status success"() {
         setup:
-        def json = [data: [[symbolicName: 'foo', state: 'Custom']]]
+        def json = [data: [[symbolicName: "foo", state: "Custom"]]]
 
-        def restClient = createMockRestClient(1, json)
-        def mojo = createMockMojo('Custom', 5)
+        setupMockServer(json)
 
-        def checker = new FelixBundleStatusChecker(mojo, restClient)
+        def checker = setupChecker("Custom", 5)
 
         when:
-        checker.checkStatus('foo')
+        checker.checkStatus("foo")
 
         then:
         notThrown(MojoFailureException)
+        verifyRequests(1)
     }
 
     def "custom bundle status failure"() {
         setup:
-        def restClient = createMockRestClient(6, JSON)
-        def mojo = createMockMojo('Custom', 5)
+        setupMockServer(JSON)
 
-        def checker = new FelixBundleStatusChecker(mojo, restClient)
+        def checker = setupChecker("Custom", 5)
 
         when:
-        checker.checkStatus('foo')
+        checker.checkStatus("foo")
 
         then:
         thrown(MojoFailureException)
+        verifyRequests(6)
     }
 
     def "resolved bundle 5 retries"() {
         setup:
-        def restClient = createMockRestClient(6, JSON)
-        def mojo = createMockMojo()
+        setupMockServer(JSON)
 
-        def checker = new FelixBundleStatusChecker(mojo, restClient)
+        def checker = setupChecker()
 
         when:
-        checker.checkStatus('bar')
+        checker.checkStatus("bar")
 
         then:
         thrown(MojoFailureException)
+        verifyRequests(6)
     }
 
     def "resolved bundle 10 retries"() {
         setup:
-        def restClient = createMockRestClient(11, JSON)
-        def mojo = createMockMojo('Active', 10)
+        setupMockServer(JSON)
 
-        def checker = new FelixBundleStatusChecker(mojo, restClient)
+        def checker = setupChecker("Active", 10)
 
         when:
-        checker.checkStatus('bar')
+        checker.checkStatus("bar")
 
         then:
         thrown(MojoFailureException)
+        verifyRequests(11)
     }
 
     def "nonexistent bundle"() {
         setup:
-        def restClient = createMockRestClient(6, JSON)
-        def mojo = createMockMojo()
+        setupMockServer(JSON)
 
-        def checker = new FelixBundleStatusChecker(mojo, restClient)
+        def checker = setupChecker()
 
         when:
-        checker.checkStatus('other')
+        checker.checkStatus("other")
 
         then:
         thrown(MojoFailureException)
+        verifyRequests(6)
     }
 
     def "multiple bundles"() {
         setup:
-        def json = [data: [[symbolicName: 'foo', state: 'Active'], [symbolicName: 'bar', state: 'Active']]]
+        def json = [data: [[symbolicName: "foo", state: "Active"], [symbolicName: "bar", state: "Active"]]]
 
-        def restClient = createMockRestClient(1, json)
-        def mojo = createMockMojo()
+        setupMockServer(json)
 
-        def checker = new FelixBundleStatusChecker(mojo, restClient)
+        def checker = setupChecker()
 
         when:
-        checker.checkStatus('foo')
-        checker.checkStatus('bar')
+        checker.checkStatus("foo")
+        checker.checkStatus("bar")
 
         then:
         notThrown(MojoFailureException)
+        verifyRequests(1)
     }
 
     def "multiple bundles, fails on first"() {
         setup:
-        def restClient = createMockRestClient(6, JSON)
-        def mojo = createMockMojo()
+        setupMockServer(JSON)
 
-        def checker = new FelixBundleStatusChecker(mojo, restClient)
+        def checker = setupChecker()
 
         when:
-        checker.checkStatus('bar')
-        checker.checkStatus('foo')
+        checker.checkStatus("bar")
+        checker.checkStatus("foo")
 
         then:
         thrown(MojoFailureException)
+        verifyRequests(6)
     }
 
     def "multiple bundles, fails on second"() {
         setup:
-        def restClient = createMockRestClient(6, JSON)
-        def mojo = createMockMojo()
+        setupMockServer(JSON)
 
-        def checker = new FelixBundleStatusChecker(mojo, restClient)
+        def checker = setupChecker()
 
         when:
-        checker.checkStatus('foo')
-        checker.checkStatus('bar')
+        checker.checkStatus("foo")
+        checker.checkStatus("bar")
 
         then:
         thrown(MojoFailureException)
+        verifyRequests(6)
     }
 
     def "empty response"() {
         setup:
-        def restClient = createMockRestClient(1, [:])
-        def mojo = createMockMojo()
+        setupMockServer([:])
 
-        def checker = new FelixBundleStatusChecker(mojo, restClient)
+        def checker = setupChecker()
 
         when:
-        checker.checkStatus('other')
+        checker.checkStatus("other")
 
         then:
         thrown(MojoExecutionException)
+        verifyRequests(1)
     }
 
-    def createMockRestClient(expectedExecutions, json) {
-        def restClient = Mock(RESTClient)
-
-        def response = Mock(HttpResponseDecorator)
-
-        expectedExecutions * restClient.get(_, _) >> { url, closure ->
-            closure.call(response, json)
-        }
-
-        restClient
+    def setupMockServer(json) {
+        onRequest()
+            .havingMethodEqualTo("GET")
+            .havingPathEqualTo("/system/console/bundles/.json")
+            .respond()
+            .withStatus(200)
+            .withContentType("application/json")
+            .withBody(new JsonBuilder(json).toString())
     }
 
-    def createMockMojo() {
-        createMockMojo('Active', 5)
+    def setupChecker() {
+        setupChecker("Active", 5)
     }
 
-    def createMockMojo(requiredStatus, retryLimit) {
+    def setupChecker(requiredStatus, retryLimit) {
         def mojo = Mock(OsgiBundleStatusPluginMojo)
 
-        mojo.host >> 'localhost'
+        mojo.host >> "localhost"
         mojo.port >> 4502
-        mojo.username >> 'admin'
-        mojo.password >> 'admin'
+        mojo.contextPath >> ""
+        mojo.path >> "/system/console"
+        mojo.username >> "admin"
+        mojo.password >> "admin"
         mojo.requiredStatus >> requiredStatus
         mojo.retryDelay >> 1
         mojo.retryLimit >> retryLimit
         mojo.log >> Mock(Log)
 
-        mojo
+        new FelixBundleStatusChecker(mojo)
+    }
+
+    void verifyRequests(int times) {
+        verifyThatRequest()
+            .havingPathEqualTo("/system/console/bundles/.json")
+            .receivedTimes(times)
     }
 }
