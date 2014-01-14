@@ -40,6 +40,12 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
     private Integer port;
 
     /**
+     * OSGi container context path.
+     */
+    @Parameter(defaultValue = "")
+    private String contextPath;
+
+    /**
      * OSGi container user name.
      */
     @Parameter(defaultValue = "admin")
@@ -114,6 +120,10 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
 
     public Integer getPort() {
         return port;
+    }
+
+    public String getContextPath() {
+        return contextPath;
     }
 
     public String getRequiredStatus() {
