@@ -10,7 +10,7 @@ import org.apache.maven.plugin.MojoFailureException
 
 class FelixBundleStatusChecker implements BundleStatusChecker {
 
-    def mojo
+    OsgiBundleStatusPluginMojo mojo
 
     def restClient
 
