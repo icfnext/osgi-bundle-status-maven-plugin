@@ -17,7 +17,7 @@ class FelixBundleStatusCheckerSpec extends Specification {
     static def JSON = [data: [[symbolicName: "foo", state: "Active"], [symbolicName: "bar", state: "Resolved"]]]
 
     def setup() {
-        initJadlerListeningOn(4502)
+        initJadlerListeningOn(8888)
     }
 
     def cleanup() {
@@ -190,7 +190,7 @@ class FelixBundleStatusCheckerSpec extends Specification {
 
         mojo.with {
             host = "localhost"
-            port = 4502
+            port = 8888
             contextPath = ""
             path = "/system/console"
             username = "admin"
