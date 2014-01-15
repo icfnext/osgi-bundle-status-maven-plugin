@@ -15,6 +15,8 @@ import org.apache.maven.plugins.annotations.Parameter;
 @Mojo(name = "status", defaultPhase = LifecyclePhase.INSTALL)
 public class OsgiBundleStatusPluginMojo extends AbstractMojo {
 
+    private static final String PATH_SUFFIX = "/bundles/.json";
+
     /**
      * Root path to the OSGi Management Console.
      */
@@ -38,6 +40,12 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
      */
     @Parameter(defaultValue = "4502")
     private Integer port;
+
+    /**
+     * OSGi container context path.
+     */
+    @Parameter(defaultValue = "")
+    private String contextPath;
 
     /**
      * OSGi container user name.
@@ -108,10 +116,6 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
         return password;
     }
 
-    public String getPath() {
-        return path;
-    }
-
     public Integer getPort() {
         return port;
     }
@@ -138,5 +142,9 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
 
     public boolean isSecure() {
         return secure;
+    }
+
+    public String getBundlesJsonPath() {
+        return (contextPath == null ? "" : contextPath) + path + PATH_SUFFIX;
     }
 }

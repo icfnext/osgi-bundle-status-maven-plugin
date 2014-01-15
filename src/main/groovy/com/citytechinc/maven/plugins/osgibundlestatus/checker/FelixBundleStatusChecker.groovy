@@ -10,7 +10,7 @@ import org.apache.maven.plugin.MojoFailureException
 
 class FelixBundleStatusChecker implements BundleStatusChecker {
 
-    def mojo
+    OsgiBundleStatusPluginMojo mojo
 
     def restClient
 
@@ -114,7 +114,7 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
     def getBundleStatusJson() {
         def bundleStatusJson = null
 
-        restClient.get(path: "${mojo.path}/bundles/.json") { response, json ->
+        restClient.get(path: mojo.bundlesJsonPath) { response, json ->
             if (json) {
                 def data = json.data
 
