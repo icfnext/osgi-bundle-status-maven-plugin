@@ -145,6 +145,6 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
     }
 
     public String getBundlesJsonPath() {
-        return contextPath + path + PATH_SUFFIX;
+        return (contextPath == null ? "" : contextPath) + path + PATH_SUFFIX;
     }
 }
