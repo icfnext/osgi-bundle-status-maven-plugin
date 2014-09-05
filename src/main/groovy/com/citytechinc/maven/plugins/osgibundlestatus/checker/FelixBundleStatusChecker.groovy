@@ -85,7 +85,12 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
                 }
             }
 
-            status = getRemoteBundleStatus(bundleSymbolicName, true)
+            try {
+                status = getRemoteBundleStatus(bundleSymbolicName, true)
+            } catch(MojoExecutionException ex) {
+                mojo.log.info "Failed to get remote status, retrying..."
+                mojo.log.debug ex
+            }
 
             Thread.sleep(retryDelay)
 
