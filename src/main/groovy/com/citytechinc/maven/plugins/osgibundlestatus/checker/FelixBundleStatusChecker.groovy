@@ -67,7 +67,7 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
         }
     }
 
-    def getStatus(bundleSymbolicName) {
+    private def getStatus(bundleSymbolicName) {
         def status = getRemoteBundleStatus(bundleSymbolicName, false)
 
         def retryCount = 0
@@ -87,7 +87,7 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
 
             try {
                 status = getRemoteBundleStatus(bundleSymbolicName, true)
-            } catch(MojoExecutionException ex) {
+            } catch (MojoExecutionException ex) {
                 mojo.log.info "Failed to get remote status, retrying..."
                 mojo.log.debug ex
             }
@@ -100,23 +100,17 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
         status
     }
 
-    def getRemoteBundleStatus(bundleSymbolicName, force) {
-        def status = null
-
+    private def getRemoteBundleStatus(bundleSymbolicName, force) {
         if (!json || force) {
             json = getBundleStatusJson()
         }
 
         def bundle = json.find { it.symbolicName == bundleSymbolicName }
 
-        if (bundle) {
-            status = bundle.state
-        }
-
-        status
+        bundle?.state
     }
 
-    def getBundleStatusJson() {
+    private def getBundleStatusJson() throws MojoExecutionException {
         def bundleStatusJson = null
 
         restClient.get(path: mojo.bundlesJsonPath) { response, json ->
