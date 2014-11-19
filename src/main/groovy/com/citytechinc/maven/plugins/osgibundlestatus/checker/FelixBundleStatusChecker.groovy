@@ -5,6 +5,7 @@ import groovyx.net.http.RESTClient
 import org.apache.http.HttpRequest
 import org.apache.http.HttpRequestInterceptor
 import org.apache.http.protocol.HttpContext
+import org.apache.http.client.ClientProtocolException
 import org.apache.maven.plugin.MojoExecutionException
 import org.apache.maven.plugin.MojoFailureException
 
@@ -113,20 +114,23 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
     private def getBundleStatusJson() throws MojoExecutionException {
         def bundleStatusJson = null
 
-        restClient.get(path: mojo.bundlesJsonPath) { response, json ->
-            if (json) {
-                def data = json.data
+        try {
+            restClient.get(path: mojo.bundlesJsonPath) { response, json ->
+                if (json) {
+                    def data = json.data
 
-                if (data) {
-                    bundleStatusJson = data
+                    if (data) {
+                        bundleStatusJson = data
+                    } else {
+                        throw new MojoExecutionException("Invalid JSON response from Felix Console")
+                    }
                 } else {
-                    throw new MojoExecutionException("Invalid JSON response from Felix Console")
+                    throw new MojoExecutionException("Error getting JSON response from Felix Console")
                 }
-            } else {
-                throw new MojoExecutionException("Error getting JSON response from Felix Console")
             }
+        } catch (ClientProtocolException | IOException ex) {
+            throw new MojoExecutionException("Error getting JSON response from Felix Console", ex)
         }
-
         bundleStatusJson
     }
 }
