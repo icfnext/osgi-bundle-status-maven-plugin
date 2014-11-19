@@ -5,6 +5,7 @@ import groovyx.net.http.RESTClient
 import org.apache.http.HttpRequest
 import org.apache.http.HttpRequestInterceptor
 import org.apache.http.protocol.HttpContext
+import org.apache.http.client.ClientProtocolException
 import org.apache.maven.plugin.MojoExecutionException
 import org.apache.maven.plugin.MojoFailureException
 
@@ -67,7 +68,7 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
         }
     }
 
-    def getStatus(bundleSymbolicName) {
+    private def getStatus(bundleSymbolicName) {
         def status = getRemoteBundleStatus(bundleSymbolicName, false)
 
         def retryCount = 0
@@ -85,7 +86,12 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
                 }
             }
 
-            status = getRemoteBundleStatus(bundleSymbolicName, true)
+            try {
+                status = getRemoteBundleStatus(bundleSymbolicName, true)
+            } catch (MojoExecutionException ex) {
+                mojo.log.info "Failed to get remote status, retrying..."
+                mojo.log.debug ex
+            }
 
             Thread.sleep(retryDelay)
 
@@ -95,39 +101,36 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
         status
     }
 
-    def getRemoteBundleStatus(bundleSymbolicName, force) {
-        def status = null
-
+    private def getRemoteBundleStatus(bundleSymbolicName, force) {
         if (!json || force) {
             json = getBundleStatusJson()
         }
 
         def bundle = json.find { it.symbolicName == bundleSymbolicName }
 
-        if (bundle) {
-            status = bundle.state
-        }
-
-        status
+        bundle?.state
     }
 
-    def getBundleStatusJson() {
+    private def getBundleStatusJson() throws MojoExecutionException {
         def bundleStatusJson = null
 
-        restClient.get(path: mojo.bundlesJsonPath) { response, json ->
-            if (json) {
-                def data = json.data
+        try {
+            restClient.get(path: mojo.bundlesJsonPath) { response, json ->
+                if (json) {
+                    def data = json.data
 
-                if (data) {
-                    bundleStatusJson = data
+                    if (data) {
+                        bundleStatusJson = data
+                    } else {
+                        throw new MojoExecutionException("Invalid JSON response from Felix Console")
+                    }
                 } else {
-                    throw new MojoExecutionException("Invalid JSON response from Felix Console")
+                    throw new MojoExecutionException("Error getting JSON response from Felix Console")
                 }
-            } else {
-                throw new MojoExecutionException("Error getting JSON response from Felix Console")
             }
+        } catch (ClientProtocolException | IOException ex) {
+            throw new MojoExecutionException("Error getting JSON response from Felix Console", ex)
         }
-
         bundleStatusJson
     }
 }

@@ -26,6 +26,7 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
     /**
      * Symbolic names of OSGi bundles to check.
      */
+    @SuppressWarnings("MismatchedReadAndWriteOfArray")
     @Parameter(required = true)
     private String[] bundleNames;
 
