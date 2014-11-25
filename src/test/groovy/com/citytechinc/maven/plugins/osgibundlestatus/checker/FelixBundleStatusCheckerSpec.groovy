@@ -167,8 +167,8 @@ class FelixBundleStatusCheckerSpec extends Specification {
         checker.checkStatus("other")
 
         then:
-        thrown(MojoExecutionException)
-        verifyRequests(1)
+        thrown(MojoFailureException)
+        verifyRequests(6)
     }
 
     def setupMockServer(json) {

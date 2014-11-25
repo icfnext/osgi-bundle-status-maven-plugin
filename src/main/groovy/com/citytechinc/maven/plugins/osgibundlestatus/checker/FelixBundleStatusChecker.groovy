@@ -69,8 +69,8 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
     }
 
     def getStatus(bundleSymbolicName) {
-        def status = getRemoteBundleStatus(bundleSymbolicName, false)
-
+        
+        def status = getRemoteBundleStatusQuiet(bundleSymbolicName, false);
         def retryCount = 0
 
         def requiredStatus = mojo.requiredStatus
@@ -86,13 +86,8 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
                 }
             }
 
-            try {
-                status = getRemoteBundleStatus(bundleSymbolicName, true)
-            } catch(MojoExecutionException ex) {
-                mojo.log.info "Failed to get remote status, retrying..."
-                mojo.log.debug ex
-            }
-
+            status = getRemoteBundleStatusQuiet(bundleSymbolicName, true);
+            
             Thread.sleep(retryDelay)
 
             retryCount++
@@ -101,6 +96,15 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
         status
     }
 
+    def getRemoteBundleStatusQuiet(bundleSymbolicName, force) {
+        try {
+            return getRemoteBundleStatus(bundleSymbolicName, force)
+        } catch(MojoExecutionException ex) {
+            mojo.log.info "Failed to get remote status, retrying..."
+            mojo.log.debug ex
+        }
+    }
+    
     def getRemoteBundleStatus(bundleSymbolicName, force) {
         def status = null
 
