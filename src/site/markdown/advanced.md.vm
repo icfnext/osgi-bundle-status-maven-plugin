@@ -47,6 +47,27 @@ will fail if any of the bundles do not match the required status.
                                 <retryLimit>10</retryLimit>
                             </configuration>
                         </execution>
+                        <execution>
+                            <id>check-active-components</id>
+                            <goals>
+                                <goal>components-status</goal>
+                            </goals>
+                            <configuration>
+                                <skip>false</skip>
+                                <mode>loose</mode>
+                                <secure>false</secure>
+                                <host>127.0.0.1</host>
+                                <port>4502</port>
+                                <path>/system/console</path>
+                                <username>admin</username>
+                                <password>admin</password>
+                                <packages>
+                                    <package>com.citytechinc</package>
+                                    <package>com.nespresso</package>
+                                </packages>
+                            </configuration>
+                        </execution>
+
                     </executions>
                 </plugin>
             </plugins>
