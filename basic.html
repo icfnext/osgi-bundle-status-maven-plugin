@@ -13,6 +13,7 @@
 		<link href="./css/bootstrap-responsive.min.css" rel="stylesheet" />
 		<link href="./css/docs.css" rel="stylesheet" />
 		<link href="./css/reflow-skin.css" rel="stylesheet" />
+		<link href="./css/site.css" rel="stylesheet" />
 		
 		<link href="http://yandex.st/highlightjs/7.3/styles/github.min.css" rel="stylesheet" />
 		
@@ -44,17 +45,20 @@
 
 	<body class="page-basic project-osgi-bundle-status-maven-plugin" data-spy="scroll" data-offset="60" data-target="#toc-scroll-target">
 
-		<div class="navbar navbar-fixed-top">
-			<div class="navbar-inner">
+		<nav class="navbar navbar-default navbar-fixed-top">
 				<div class="container">
-					<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</a>
-					<a class="brand" href="./">OSGi Bundle Status Maven Plugin</a>
-					<div class="nav-collapse">
-						<ul class="nav pull-right">
+					<div class="navbar-header">
+				      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
+				        <span class="sr-only">Toggle navigation</span>
+				        <span class="icon-bar"></span>
+				        <span class="icon-bar"></span>
+				        <span class="icon-bar"></span>
+				      </button>
+				    
+					<a class="navbar-brand" href="index.html">OSGi Bundle Status Maven Plugin</a>
+					</div>
+					<div class="collapse navbar-collapse">
+						<ul class="nav navbar-nav navbar-right">
 							<li><a href="https://github.com/Citytechinc/osgi-bundle-status-maven-plugin" title="GitHub" class="externalLink">GitHub </a></li>
 							<li class="dropdown">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown">Overview <b class="caret"></b></a>
@@ -94,8 +98,7 @@
 						</ul>
 					</div><!--/.nav-collapse -->
 				</div>
-			</div>
-		</div>
+		</nav>
 		
 	<div class="container">
 	
@@ -108,10 +111,10 @@
 		<div class="row" id="banner">
 			<div class="span12">
 				<div class="pull-left">
-					<a href="http://www.citytechinc.com" id="bannerLeft"><img src="images/logo.png" alt="CITYTECH, Inc."></a>
+					<a href="http://www.icfolson.com" id="bannerLeft"><img src="images/logo.jpg" alt="ICF Olson"></a>
 				</div>
 				<div class="pull-right">
-										<a href="./" id="bannerRight"><h1>OSGi Bundle Status Maven Plugin</h1></a>
+										<a href="index.html" id="bannerRight"><h1>CQ Component Plugin</h1></a>
 					<p class="lead">Remote bundle status checker for OSGi containers.</p>
 				</div>
 			</div>
@@ -136,7 +139,7 @@
             &lt;plugin&gt;
                 &lt;groupId&gt;com.citytechinc.maven.plugins&lt;/groupId&gt;
                 &lt;artifactId&gt;osgi-bundle-status-maven-plugin&lt;/artifactId&gt;
-                &lt;version&gt;1.3.0&lt;/version&gt;
+                &lt;version&gt;1.3.2&lt;/version&gt;
                 &lt;executions&gt;
                     &lt;execution&gt;
                         &lt;goals&gt;
@@ -216,7 +219,7 @@
 		<div class="row">
 			<div class="span12">
 				<p class="pull-right"><a href="#">Back to top</a></p>
-				<p class="copyright">Copyright &copy;2014 <a href="http://www.citytechinc.com">CITYTECH, Inc.</a>. All Rights Reserved.</p>
+				<p class="copyright">Copyright &copy;2016 <a href="http://www.icfolson.com">ICF Olson</a>. All Rights Reserved.</p>
 			</div>
 		</div>
 	</div>
@@ -243,6 +246,7 @@
 	<script src="http://yandex.st/highlightjs/7.3/highlight.min.js"></script>
 
 	<script src="./js/reflow-skin.js"></script>
+	<script src="https://use.typekit.net/rya5bvi.js"></script><script>try{Typekit.load({ async: true });}catch(e){}</script>
 	
 	</body>
 </html>
