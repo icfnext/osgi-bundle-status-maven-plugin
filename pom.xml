@@ -10,11 +10,11 @@
 	<packaging>maven-plugin</packaging>
 
 	<organization>
-		<name>CITYTECH, Inc.</name>
-		<url>http://www.citytechinc.com</url>
+		<name>ICF Olson</name>
+		<url>http://www.icfolson.com</url>
 	</organization>
 
-	<url>http://code.citytechinc.com/osgi-bundle-status-maven-plugin</url>
+	<url>http:///code.digitalatolson.com/osgi-bundle-status-maven-plugin</url>
 
 	<developers>
 		<developer>
