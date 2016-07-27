@@ -9,7 +9,7 @@
 	</skin>
 
     <bannerRight>
-		<name>CQ Component Plugin</name>
+		<name>OSGi Bundle Status Maven Plugin</name>
 		<href>index.html</href>
 	</bannerRight>
 
