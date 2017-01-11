@@ -7,12 +7,17 @@ import org.apache.http.HttpRequestInterceptor
 import org.apache.http.protocol.HttpContext
 import org.apache.maven.plugin.MojoExecutionException
 import org.apache.maven.plugin.MojoFailureException
+import org.apache.maven.shared.osgi.DefaultMaven2OsgiConverter
+import org.apache.maven.shared.osgi.Maven2OsgiConverter
+import org.osgi.framework.Version
 
 class FelixBundleStatusChecker implements BundleStatusChecker {
 
     OsgiBundleStatusPluginMojo mojo
 
     RESTClient restClient
+
+    Maven2OsgiConverter maven2OsgiConverter
 
     def json
 
@@ -22,6 +27,8 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
         def scheme = mojo.secure ? "https" : "http"
 
         restClient = new RESTClient("$scheme://${mojo.host}:${mojo.port}")
+
+        maven2OsgiConverter = new DefaultMaven2OsgiConverter()
 
         restClient.client.addRequestInterceptor(new HttpRequestInterceptor() {
             @Override
@@ -33,7 +40,10 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
     }
 
     @Override
-    void checkStatus(String bundleSymbolicName) throws MojoExecutionException, MojoFailureException {
+    void checkStatus(String bundleName) throws MojoExecutionException, MojoFailureException {
+        def bundleSymbolicName = parseSymbolicName(bundleName)
+        def expectedVersion = parseExpectedVersion(bundleName)
+
         if (!mojo.quiet) {
             mojo.log.info "Checking OSGi bundle status: $bundleSymbolicName"
         }
@@ -58,6 +68,11 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
 
                 throw new MojoFailureException(msg)
             }
+
+            if (expectedVersion) {
+                checkVersion(bundleSymbolicName, expectedVersion)
+            }
+
         } catch (IOException e) {
             throw new MojoExecutionException("Error getting bundle status from Felix Console", e)
         }
@@ -97,6 +112,49 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
         }
 
         status
+    }
+
+    private static def parseSymbolicName(String bundleName) {
+        def symbolicName = bundleName
+        if (bundleName.indexOf(';') != -1) {
+            symbolicName = bundleName.substring(0, bundleName.indexOf(';'))
+        }
+
+        symbolicName
+    }
+
+    private def parseExpectedVersion(String bundleName) {
+        def version = null
+        if (bundleName.indexOf(';') != -1) {
+            def mavenVersion = bundleName.substring(bundleName.indexOf(';') + 1, bundleName.length())
+
+            version = Version.parseVersion(maven2OsgiConverter.getVersion(mavenVersion))
+        }
+
+        version
+    }
+
+    private def checkVersion(String bundleSymbolicName, Version expectedVersion) {
+        if (!mojo.quiet) {
+            mojo.log.info "Checking for expected version $expectedVersion of OSGi bundle $bundleSymbolicName"
+        }
+
+        def version = findVersion(bundleSymbolicName)
+
+        if (expectedVersion != version) {
+            throw new MojoFailureException("Expected version $expectedVersion of $bundleSymbolicName does not match actual version $version")
+        }
+    }
+
+    private def findVersion(String bundleSymbolicName) {
+        def version = null
+        def bundle = json.find { it.symbolicName == bundleSymbolicName }
+
+        if (bundle) {
+            version = Version.parseVersion(bundle.version)
+        }
+
+        version
     }
 
     private def getRemoteBundleStatusQuiet(String bundleSymbolicName, boolean force) {
