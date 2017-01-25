@@ -1,7 +1,7 @@
-package com.citytechinc.maven.plugins.osgibundlestatus;
+package com.icfolson.maven.plugins.osgibundlestatus;
 
-import com.citytechinc.maven.plugins.osgibundlestatus.checker.BundleStatusChecker;
-import com.citytechinc.maven.plugins.osgibundlestatus.checker.FelixBundleStatusChecker;
+import com.icfolson.maven.plugins.osgibundlestatus.checker.BundleStatusChecker;
+import com.icfolson.maven.plugins.osgibundlestatus.checker.FelixBundleStatusChecker;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -24,7 +24,7 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
     private String path;
 
     /**
-     * Symbolic names of OSGi bundles to check.
+     * Symbolic names of OSGi bundles to check.  Names can include a version number
      */
     @SuppressWarnings("MismatchedReadAndWriteOfArray")
     @Parameter(required = true)
@@ -45,7 +45,7 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
     /**
      * OSGi container context path.
      */
-    @Parameter(defaultValue = "")
+    @Parameter
     private String contextPath;
 
     /**
@@ -96,6 +96,18 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
     @Parameter(property = "osgi.bundle.status.quiet", defaultValue = "false")
     private boolean quiet;
 
+    /**
+     * Read timeout in milliseconds.  Defaults to 0 (infinite).
+     */
+    @Parameter(defaultValue = "0")
+    private Integer readTimeout;
+
+    /**
+     * Connection timeout in milliseconds.  Defaults to 0 (infinite).
+     */
+    @Parameter(defaultValue = "0")
+    private Integer connectTimeout;
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         if (skip) {
@@ -143,6 +155,14 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
 
     public boolean isSecure() {
         return secure;
+    }
+
+    public Integer getReadTimeout() {
+        return readTimeout;
+    }
+
+    public Integer getConnectTimeout() {
+        return connectTimeout;
     }
 
     public String getBundlesJsonPath() {

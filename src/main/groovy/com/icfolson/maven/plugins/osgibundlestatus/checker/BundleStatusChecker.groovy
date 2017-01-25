@@ -1,4 +1,4 @@
-package com.citytechinc.maven.plugins.osgibundlestatus.checker
+package com.icfolson.maven.plugins.osgibundlestatus.checker
 
 import org.apache.maven.plugin.MojoExecutionException
 import org.apache.maven.plugin.MojoFailureException

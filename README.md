@@ -1,12 +1,12 @@
 # OSGi Bundle Status Maven Plugin
 
-[CITYTECH, Inc.](http://www.citytechinc.com)
+[ICF Olson](http://www.digitalatolson.com)
 
 ## Overview
 
 Remote bundle status checker for OSGi containers.
 
-See the [Maven site](http://code.citytechinc.com/osgi-bundle-status-maven-plugin) for full documentation.
+See the [Maven site](http://code.digitalatolson.com/osgi-bundle-status-maven-plugin) for full documentation.
 
 ## Versioning
 

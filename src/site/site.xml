@@ -3,15 +3,15 @@
          xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0 http://maven.apache.org/xsd/decoration-1.0.0.xsd">
 
     <skin>
-        <groupId>com.citytechinc.maven</groupId>
-        <artifactId>citytech-maven-skin</artifactId>
-        <version>1.0.0</version>
-    </skin>
+		<groupId>com.icfolson.maven</groupId>
+		<artifactId>icfolson-maven-skin</artifactId>
+		<version>1.0.0</version>
+	</skin>
 
     <bannerRight>
-        <name>${project.name}</name>
-        <href>http://code.citytechinc.com/osgi-bundle-status-maven-plugin</href>
-    </bannerRight>
+		<name>OSGi Bundle Status Maven Plugin</name>
+		<href>index.html</href>
+	</bannerRight>
 
     <googleAnalyticsAccountId>UA-928005-4</googleAnalyticsAccountId>
 
@@ -29,7 +29,7 @@
             <topNav>Overview|Examples|reports</topNav>
             <brand>
                 <name>${project.name}</name>
-                <href>http://code.citytechinc.com/osgi-bundle-status-maven-plugin</href>
+                <href>index.html</href>
             </brand>
             <slogan position="bannerRight">Remote bundle status checker for OSGi containers.</slogan>
             <body />
