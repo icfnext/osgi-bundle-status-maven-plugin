@@ -75,7 +75,7 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
 
     private void checkBundleVersion(Bundle expected, Bundle actual) {
         if (!mojo.quiet) {
-            mojo.log.info("Checking for expected version ${expected.version} of OSGi bundle ${expected.symbolicName}")
+            mojo.log.info("Checking for expected version ${expected.version} of bundle ${expected.symbolicName}")
         }
 
         def expectedVersion = Version.parseVersion(maven2OsgiConverter.getVersion(expected.version))
@@ -133,6 +133,8 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
             }
 
             bundle = bundles.find { it.symbolicName == bundleSymbolicName }
+
+            mojo.log.debug("Found bundle: ${bundle}")
         } catch (MojoExecutionException ex) {
             mojo.log.info("Failed to get remote status, retrying...")
             mojo.log.debug(ex)

@@ -7,6 +7,7 @@ import org.apache.maven.plugin.MojoFailureException
 import org.apache.maven.plugin.logging.Log
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 class FelixBundleStatusCheckerSpec extends Specification {
@@ -96,9 +97,11 @@ class FelixBundleStatusCheckerSpec extends Specification {
         }
     }
 
-    private static final def JSON = [data: [
-        [symbolicName: "foo", state: "Active"],
-        [symbolicName: "bar", state: "Resolved"]]
+    private static final def JSON = [
+        data: [
+            [symbolicName: "foo", state: "Active", version: "1.0.0"],
+            [symbolicName: "bar", state: "Resolved"],
+        ]
     ]
 
     def setup() {
@@ -120,6 +123,34 @@ class FelixBundleStatusCheckerSpec extends Specification {
 
         then:
         notThrown(MojoFailureException)
+        verifyRequests(1)
+    }
+
+    def "active bundle with version"() {
+        setup:
+        setupMockServer(JSON)
+
+        def checker = setupChecker()
+
+        when:
+        checker.checkStatus("foo;1.0.0")
+
+        then:
+        notThrown(MojoFailureException)
+        verifyRequests(1)
+    }
+
+    def "active bundle with invalid version"() {
+        setup:
+        setupMockServer(JSON)
+
+        def checker = setupChecker()
+
+        when:
+        checker.checkStatus("foo;1.0.1")
+
+        then:
+        thrown(MojoFailureException)
         verifyRequests(1)
     }
 
