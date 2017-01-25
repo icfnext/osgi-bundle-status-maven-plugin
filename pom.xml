@@ -97,7 +97,7 @@
                         <version>1.4</version>
                         <executions>
                             <execution>
-                                <phase>verify</phase>
+                                <phase>deploy</phase>
                                 <goals>
                                     <goal>sign</goal>
                                 </goals>
