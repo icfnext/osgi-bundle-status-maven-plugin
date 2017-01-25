@@ -1,6 +1,6 @@
-package com.citytechinc.maven.plugins.osgibundlestatus.checker
+package com.icfolson.maven.plugins.osgibundlestatus.checker
 
-import com.citytechinc.maven.plugins.osgibundlestatus.OsgiBundleStatusPluginMojo
+import com.icfolson.maven.plugins.osgibundlestatus.OsgiBundleStatusPluginMojo
 import groovy.json.JsonBuilder
 import net.jadler.Jadler
 import org.apache.maven.plugin.MojoFailureException

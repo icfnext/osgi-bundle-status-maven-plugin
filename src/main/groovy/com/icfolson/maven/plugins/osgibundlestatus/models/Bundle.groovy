@@ -1,4 +1,4 @@
-package com.citytechinc.maven.plugins.osgibundlestatus.models
+package com.icfolson.maven.plugins.osgibundlestatus.models
 
 import groovy.transform.ToString
 
@@ -25,6 +25,4 @@ class Bundle {
     String version
 
     String symbolicName
-
-
 }

@@ -1,10 +1,10 @@
-package com.citytechinc.maven.plugins.osgibundlestatus.checker
+package com.icfolson.maven.plugins.osgibundlestatus.checker
 
-import com.citytechinc.maven.plugins.osgibundlestatus.OsgiBundleStatusPluginMojo
-import com.citytechinc.maven.plugins.osgibundlestatus.models.Bundle
-import com.citytechinc.maven.plugins.osgibundlestatus.models.BundleStatus
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider
+import com.icfolson.maven.plugins.osgibundlestatus.OsgiBundleStatusPluginMojo
+import com.icfolson.maven.plugins.osgibundlestatus.models.Bundle
+import com.icfolson.maven.plugins.osgibundlestatus.models.BundleStatus
 import com.sun.jersey.api.client.Client
 import com.sun.jersey.api.client.ClientHandlerException
 import com.sun.jersey.api.client.UniformInterfaceException

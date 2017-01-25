@@ -1,4 +1,4 @@
-package com.citytechinc.maven.plugins.osgibundlestatus.models
+package com.icfolson.maven.plugins.osgibundlestatus.models
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
