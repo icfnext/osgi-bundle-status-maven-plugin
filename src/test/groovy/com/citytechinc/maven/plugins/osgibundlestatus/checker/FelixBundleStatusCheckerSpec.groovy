@@ -2,26 +2,111 @@ package com.citytechinc.maven.plugins.osgibundlestatus.checker
 
 import com.citytechinc.maven.plugins.osgibundlestatus.OsgiBundleStatusPluginMojo
 import groovy.json.JsonBuilder
-import org.apache.maven.plugin.MojoExecutionException
+import net.jadler.Jadler
 import org.apache.maven.plugin.MojoFailureException
 import org.apache.maven.plugin.logging.Log
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import spock.lang.Specification
-
-import static net.jadler.Jadler.closeJadler
-import static net.jadler.Jadler.initJadlerListeningOn
-import static net.jadler.Jadler.onRequest
-import static net.jadler.Jadler.verifyThatRequest
 
 class FelixBundleStatusCheckerSpec extends Specification {
 
-    static def JSON = [data: [[symbolicName: "foo", state: "Active"], [symbolicName: "bar", state: "Resolved"]]]
+    private static final Logger LOG = LoggerFactory.getLogger(OsgiBundleStatusPluginMojo)
+
+    static class MockLog implements Log {
+
+        @Override
+        boolean isDebugEnabled() {
+            true
+        }
+
+        @Override
+        void debug(CharSequence content) {
+            LOG.debug(content as String)
+        }
+
+        @Override
+        void debug(CharSequence content, Throwable error) {
+            LOG.debug(content as String, error)
+        }
+
+        @Override
+        void debug(Throwable error) {
+            LOG.debug("", error)
+        }
+
+        @Override
+        boolean isInfoEnabled() {
+            true
+        }
+
+        @Override
+        void info(CharSequence content) {
+            LOG.info(content as String)
+        }
+
+        @Override
+        void info(CharSequence content, Throwable error) {
+            LOG.info(content as String, error)
+        }
+
+        @Override
+        void info(Throwable error) {
+            LOG.info("", error)
+        }
+
+        @Override
+        boolean isWarnEnabled() {
+            true
+        }
+
+        @Override
+        void warn(CharSequence content) {
+            LOG.warn(content as String)
+        }
+
+        @Override
+        void warn(CharSequence content, Throwable error) {
+            LOG.warn(content as String, error)
+        }
+
+        @Override
+        void warn(Throwable error) {
+            LOG.warn("", error)
+        }
+
+        @Override
+        boolean isErrorEnabled() {
+            true
+        }
+
+        @Override
+        void error(CharSequence content) {
+            LOG.error(content as String)
+        }
+
+        @Override
+        void error(CharSequence content, Throwable error) {
+            LOG.error(content as String, error)
+        }
+
+        @Override
+        void error(Throwable error) {
+            LOG.error("", error)
+        }
+    }
+
+    private static final def JSON = [data: [
+        [symbolicName: "foo", state: "Active"],
+        [symbolicName: "bar", state: "Resolved"]]
+    ]
 
     def setup() {
-        initJadlerListeningOn(8888)
+        Jadler.initJadlerListeningOn(8888)
     }
 
     def cleanup() {
-        closeJadler()
+        Jadler.closeJadler()
     }
 
     def "active bundle"() {
@@ -172,7 +257,7 @@ class FelixBundleStatusCheckerSpec extends Specification {
     }
 
     def setupMockServer(json) {
-        onRequest()
+        Jadler.onRequest()
             .havingMethodEqualTo("GET")
             .havingPathEqualTo("/system/console/bundles/.json")
             .respond()
@@ -198,14 +283,14 @@ class FelixBundleStatusCheckerSpec extends Specification {
             requiredStatus = status
             retryDelay = 1
             retryLimit = limit
-            log = Mock(Log)
+            log = new MockLog()
         }
 
         new FelixBundleStatusChecker(mojo)
     }
 
     void verifyRequests(int times) {
-        verifyThatRequest()
+        Jadler.verifyThatRequest()
             .havingPathEqualTo("/system/console/bundles/.json")
             .receivedTimes(times)
     }

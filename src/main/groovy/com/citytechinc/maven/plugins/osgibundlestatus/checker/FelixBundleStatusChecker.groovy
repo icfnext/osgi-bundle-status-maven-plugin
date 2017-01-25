@@ -1,10 +1,16 @@
 package com.citytechinc.maven.plugins.osgibundlestatus.checker
 
 import com.citytechinc.maven.plugins.osgibundlestatus.OsgiBundleStatusPluginMojo
-import groovyx.net.http.RESTClient
-import org.apache.http.HttpRequest
-import org.apache.http.HttpRequestInterceptor
-import org.apache.http.protocol.HttpContext
+import com.citytechinc.maven.plugins.osgibundlestatus.models.Bundle
+import com.citytechinc.maven.plugins.osgibundlestatus.models.BundleStatus
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider
+import com.sun.jersey.api.client.Client
+import com.sun.jersey.api.client.ClientHandlerException
+import com.sun.jersey.api.client.UniformInterfaceException
+import com.sun.jersey.api.client.WebResource
+import com.sun.jersey.api.client.config.DefaultClientConfig
+import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter
 import org.apache.maven.plugin.MojoExecutionException
 import org.apache.maven.plugin.MojoFailureException
 import org.apache.maven.shared.osgi.DefaultMaven2OsgiConverter
@@ -13,70 +19,77 @@ import org.osgi.framework.Version
 
 class FelixBundleStatusChecker implements BundleStatusChecker {
 
-    private final OsgiBundleStatusPluginMojo mojo
-
-    private final RESTClient restClient
+    private static final ObjectMapper MAPPER = new ObjectMapper()
 
     private final Maven2OsgiConverter maven2OsgiConverter = new DefaultMaven2OsgiConverter()
 
-    def json
+    private final OsgiBundleStatusPluginMojo mojo
+
+    private final WebResource resource
+
+    private List<Bundle> bundles
 
     FelixBundleStatusChecker(OsgiBundleStatusPluginMojo mojo) {
         this.mojo = mojo
 
         def scheme = mojo.secure ? "https" : "http"
 
-        restClient = new RESTClient("$scheme://${mojo.host}:${mojo.port}")
-
-        restClient.client.addRequestInterceptor(new HttpRequestInterceptor() {
-            @Override
-            void process(HttpRequest httpRequest, HttpContext httpContext) {
-                httpRequest.addHeader("Authorization",
-                    "Basic " + "${mojo.username}:${mojo.password}".toString().bytes.encodeBase64().toString())
-            }
-        })
+        resource = client.resource("$scheme://${mojo.host}:${mojo.port}").path(mojo.bundlesJsonPath)
     }
 
     @Override
     void checkStatus(String bundleName) throws MojoExecutionException, MojoFailureException {
-        def bundleSymbolicName = parseSymbolicName(bundleName)
-        def expectedVersion = parseExpectedVersion(bundleName)
+        def expectedBundle = Bundle.fromSymbolicName(bundleName)
 
         if (!mojo.quiet) {
-            mojo.log.info "Checking OSGi bundle status: $bundleSymbolicName"
+            mojo.log.info("Checking OSGi bundle status: ${expectedBundle.symbolicName}")
         }
 
-        def requiredStatus = mojo.requiredStatus
+        def remoteBundle = checkBundleStatus(expectedBundle)
 
-        try {
-            def status = getStatus(bundleSymbolicName)
-
-            if (requiredStatus == status) {
-                if (!mojo.quiet) {
-                    mojo.log.info "$bundleSymbolicName is $status"
-                }
-            } else {
-                def msg
-
-                if (status) {
-                    msg = "$bundleSymbolicName bundle status required to be $requiredStatus but is $status"
-                } else {
-                    msg = "Bundle not found: $bundleSymbolicName"
-                }
-
-                throw new MojoFailureException(msg)
-            }
-
-            if (expectedVersion) {
-                checkVersion(bundleSymbolicName, expectedVersion)
-            }
-        } catch (IOException e) {
-            throw new MojoExecutionException("Error getting bundle status from Felix Console", e)
+        if (expectedBundle.version) {
+            checkBundleVersion(expectedBundle, remoteBundle)
         }
     }
 
-    private def getStatus(String bundleSymbolicName) {
-        def status = getRemoteBundleStatusQuiet(bundleSymbolicName, false)
+    private Bundle checkBundleStatus(Bundle bundle) {
+        def remoteBundle = getBundle(bundle.symbolicName)
+
+        if (remoteBundle) {
+            def status = remoteBundle.state
+
+            if (mojo.requiredStatus == status) {
+                if (!mojo.quiet) {
+                    mojo.log.info("${bundle.symbolicName} is $status")
+                }
+            } else {
+                throw new MojoFailureException("${bundle.symbolicName} bundle status required to be " +
+                    "${mojo.requiredStatus} but is $status")
+            }
+        } else {
+            throw new MojoFailureException("Bundle not found: ${bundle.symbolicName}")
+        }
+
+        remoteBundle
+    }
+
+    private void checkBundleVersion(Bundle expected, Bundle actual) {
+        if (!mojo.quiet) {
+            mojo.log.info("Checking for expected version ${expected.version} of OSGi bundle ${expected.symbolicName}")
+        }
+
+        def expectedVersion = Version.parseVersion(maven2OsgiConverter.getVersion(expected.version))
+        def actualVersion = Version.parseVersion(actual.version)
+
+        if (expectedVersion != actualVersion) {
+            throw new MojoFailureException(
+                "Expected version ${expected.version} of ${expected.symbolicName} does not match actual version " +
+                    "$actualVersion")
+        }
+    }
+
+    private Bundle getBundle(String bundleSymbolicName) {
+        def bundle = getRemoteBundle(bundleSymbolicName, false)
 
         def retryCount = 0
 
@@ -84,17 +97,17 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
         def retryLimit = mojo.retryLimit
         def retryDelay = mojo.retryDelay
 
-        while (requiredStatus != status && retryCount < retryLimit) {
+        while ((!bundle || requiredStatus != bundle.state) && retryCount < retryLimit) {
             if (!mojo.quiet) {
-                if (status) {
-                    mojo.log.info "Bundle is $status, retrying..."
+                if (bundle) {
+                    mojo.log.info("Bundle is ${bundle.state}, retrying...")
                 } else {
-                    mojo.log.info "Bundle not found, retrying..."
+                    mojo.log.info("Bundle not found, retrying...")
                 }
             }
 
             try {
-                status = getRemoteBundleStatusQuiet(bundleSymbolicName, true);
+                bundle = getRemoteBundle(bundleSymbolicName, true)
             } catch (Exception e) {
                 if (retryCount == retryLimit - 1) {
                     throw e
@@ -108,93 +121,55 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
             retryCount++
         }
 
-        status
+        bundle
     }
 
-    private static def parseSymbolicName(String bundleName) {
-        def symbolicName = bundleName
-        if (bundleName.indexOf(';') != -1) {
-            symbolicName = bundleName.substring(0, bundleName.indexOf(';'))
-        }
-
-        symbolicName
-    }
-
-    private def parseExpectedVersion(String bundleName) {
-        def version = null
-        if (bundleName.indexOf(';') != -1) {
-            def mavenVersion = bundleName.substring(bundleName.indexOf(';') + 1, bundleName.length())
-
-            version = Version.parseVersion(maven2OsgiConverter.getVersion(mavenVersion))
-        }
-
-        version
-    }
-
-    private void checkVersion(String bundleSymbolicName, Version expectedVersion) {
-        if (!mojo.quiet) {
-            mojo.log.info "Checking for expected version $expectedVersion of OSGi bundle $bundleSymbolicName"
-        }
-
-        def version = findVersion(bundleSymbolicName)
-
-        if (expectedVersion != version) {
-            throw new MojoFailureException(
-                "Expected version $expectedVersion of $bundleSymbolicName does not match actual version $version")
-        }
-    }
-
-    private Version findVersion(String bundleSymbolicName) {
-        def version = null
-        def bundle = json.find { it.symbolicName == bundleSymbolicName }
-
-        if (bundle) {
-            version = Version.parseVersion(bundle.version)
-        }
-
-        version
-    }
-
-    private def getRemoteBundleStatusQuiet(String bundleSymbolicName, boolean force) {
-        try {
-            return getRemoteBundleStatus(bundleSymbolicName, force)
-        } catch (MojoExecutionException ex) {
-            mojo.log.info "Failed to get remote status, retrying..."
-            mojo.log.debug ex
-        }
-    }
-
-    private def getRemoteBundleStatus(String bundleSymbolicName, boolean force) {
-        if (!json || force) {
-            json = getBundleStatusJson()
-        }
-
-        def bundle = json.find { it.symbolicName == bundleSymbolicName }
-
-        bundle?.state
-    }
-
-    private def getBundleStatusJson() throws MojoExecutionException {
-        def bundleStatusJson = null
+    private Bundle getRemoteBundle(String bundleSymbolicName, boolean force) {
+        def bundle = null
 
         try {
-            restClient.get(path: mojo.bundlesJsonPath) { response, json ->
-                if (json) {
-                    def data = json.data
-
-                    if (data) {
-                        bundleStatusJson = data
-                    } else {
-                        throw new MojoExecutionException("Invalid JSON response from Felix Console")
-                    }
-                } else {
-                    throw new MojoExecutionException("Error getting JSON response from Felix Console")
-                }
+            if (!bundles || force) {
+                bundles = remoteBundles
             }
-        } catch (IOException ex) {
-            throw new MojoExecutionException("Error getting JSON response from Felix Console", ex)
+
+            bundle = bundles.find { it.symbolicName == bundleSymbolicName }
+        } catch (MojoExecutionException ex) {
+            mojo.log.info("Failed to get remote status, retrying...")
+            mojo.log.debug(ex)
         }
 
-        bundleStatusJson
+        bundle
+    }
+
+    private List<Bundle> getRemoteBundles() throws MojoExecutionException {
+        def bundles
+
+        try {
+            def bundleStatus = resource.get(BundleStatus)
+
+            bundles = bundleStatus.bundles
+        } catch (IOException e) {
+            throw new MojoExecutionException("Error getting JSON response from Felix Console", e)
+        } catch (UniformInterfaceException e) {
+            throw new MojoExecutionException("Error getting JSON response from Felix Console", e)
+        } catch (ClientHandlerException e) {
+            throw new MojoExecutionException("Error getting JSON response from Felix Console", e)
+        }
+
+        bundles
+    }
+
+    private Client getClient() {
+        def clientConfig = new DefaultClientConfig()
+
+        clientConfig.singletons.add(new JacksonJsonProvider(MAPPER))
+
+        def client = Client.create(clientConfig)
+
+        client.addFilter(new HTTPBasicAuthFilter(mojo.username, mojo.password))
+        client.connectTimeout = mojo.connectTimeout
+        client.readTimeout = mojo.readTimeout
+
+        client
     }
 }
