@@ -17,9 +17,11 @@ import org.apache.maven.shared.osgi.DefaultMaven2OsgiConverter
 import org.apache.maven.shared.osgi.Maven2OsgiConverter
 import org.osgi.framework.Version
 
+import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES
+
 class FelixBundleStatusChecker implements BundleStatusChecker {
 
-    private static final ObjectMapper MAPPER = new ObjectMapper()
+    private static final ObjectMapper MAPPER = new ObjectMapper().configure(FAIL_ON_UNKNOWN_PROPERTIES, false)
 
     private final Maven2OsgiConverter maven2OsgiConverter = new DefaultMaven2OsgiConverter()
 
@@ -35,6 +37,8 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
         def scheme = mojo.secure ? "https" : "http"
 
         resource = client.resource("$scheme://${mojo.host}:${mojo.port}").path(mojo.bundlesJsonPath)
+
+        mojo.log.debug("OSGi console URI: $resource")
     }
 
     @Override
