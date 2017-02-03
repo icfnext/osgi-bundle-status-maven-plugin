@@ -1,8 +1,9 @@
-package com.icfolson.maven.plugins.osgibundlestatus.checker
+package com.icfolson.maven.plugins.osgibundlestatus.checker.impl
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider
 import com.icfolson.maven.plugins.osgibundlestatus.OsgiBundleStatusPluginMojo
+import com.icfolson.maven.plugins.osgibundlestatus.checker.BundleStatusChecker
 import com.icfolson.maven.plugins.osgibundlestatus.models.Bundle
 import com.icfolson.maven.plugins.osgibundlestatus.models.BundleStatus
 import com.sun.jersey.api.client.Client
@@ -133,7 +134,7 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
 
         try {
             if (!bundles || force) {
-                bundles = remoteBundles
+                bundles = getRemoteBundles()
             }
 
             bundle = bundles.find { it.symbolicName == bundleSymbolicName }
@@ -154,11 +155,7 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
             def bundleStatus = resource.get(BundleStatus)
 
             bundles = bundleStatus.bundles
-        } catch (IOException e) {
-            throw new MojoExecutionException("Error getting JSON response from Felix Console", e)
-        } catch (UniformInterfaceException e) {
-            throw new MojoExecutionException("Error getting JSON response from Felix Console", e)
-        } catch (ClientHandlerException e) {
+        } catch (IOException | UniformInterfaceException | ClientHandlerException e) {
             throw new MojoExecutionException("Error getting JSON response from Felix Console", e)
         }
 
