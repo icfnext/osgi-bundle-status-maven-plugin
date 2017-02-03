@@ -24,7 +24,8 @@ public class OsgiBundleStatusPluginMojo extends AbstractMojo {
     private String path;
 
     /**
-     * Symbolic names of OSGi bundles to check.  Names can include a version number
+     * Symbolic names of OSGi bundles to check.  Names can include a version number delimited with a semicolon, e.g.
+     * "bundle-name;1.0.0".
      */
     @SuppressWarnings("MismatchedReadAndWriteOfArray")
     @Parameter(required = true)
