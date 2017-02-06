@@ -1,7 +1,7 @@
 package com.icfolson.maven.plugins.osgibundlestatus;
 
 import com.icfolson.maven.plugins.osgibundlestatus.checker.BundleStatusChecker;
-import com.icfolson.maven.plugins.osgibundlestatus.checker.FelixBundleStatusChecker;
+import com.icfolson.maven.plugins.osgibundlestatus.checker.impl.FelixBundleStatusChecker;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;

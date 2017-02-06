@@ -1,4 +1,4 @@
-package com.icfolson.maven.plugins.osgibundlestatus.checker
+package com.icfolson.maven.plugins.osgibundlestatus.checker.impl
 
 import com.icfolson.maven.plugins.osgibundlestatus.OsgiBundleStatusPluginMojo
 import groovy.json.JsonBuilder
