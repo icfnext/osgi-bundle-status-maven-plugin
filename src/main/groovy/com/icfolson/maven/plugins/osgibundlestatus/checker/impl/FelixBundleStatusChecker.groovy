@@ -134,7 +134,7 @@ class FelixBundleStatusChecker implements BundleStatusChecker {
 
         try {
             if (!bundles || force) {
-                bundles = getRemoteBundles()
+                bundles = remoteBundles
             }
 
             bundle = bundles.find { it.symbolicName == bundleSymbolicName }
